@@ -1,11 +1,11 @@
-@import url('https://fonts.googleapis.com/css?family=Raleway&display=swap');
-
+@import url("https://fonts.googleapis.com/css?family=Raleway&display=swap");
 *,
 *::before,
 *::after {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
 }
 
 body {
@@ -14,22 +14,45 @@ body {
   height: 100vh;
   font-family: 'Raleway', sans-serif;
   font-size: x-large;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-  animation: pulse 1s linear infinite alternate;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-animation: pulse 1s linear infinite alternate;
+          animation: pulse 1s linear infinite alternate;
+}
+
+@-webkit-keyframes pulse {
+  from {
+    opacity: 0.7;
+    -webkit-box-shadow: 0 0 1px 0 white;
+            box-shadow: 0 0 1px 0 white;
+  }
+  to {
+    opacity: 1;
+    -webkit-box-shadow: 0 0 10px 0 white;
+            box-shadow: 0 0 10px 0 white;
+  }
 }
 
 @keyframes pulse {
   from {
     opacity: 0.7;
-    box-shadow: 0 0 1px 0 white;
+    -webkit-box-shadow: 0 0 1px 0 white;
+            box-shadow: 0 0 1px 0 white;
   }
-
   to {
     opacity: 1;
-    box-shadow: 0 0 10px 0 white;
+    -webkit-box-shadow: 0 0 10px 0 white;
+            box-shadow: 0 0 10px 0 white;
   }
-
 }
+/*# sourceMappingURL=style.css.map */
