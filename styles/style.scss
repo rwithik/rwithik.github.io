@@ -17,3 +17,39 @@
     margin-right: auto;
   }
 }
+
+.subtitle__item {
+  position: relative;
+  z-index: 2;
+  display: inline-block;
+  line-height: 1.6em;
+  padding: 0 3px;
+
+  @at-root &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 1;
+    transform-origin: center bottom;
+    transform: scaleY(0.1);
+    transition: transform 150ms ease-in-out;
+  }
+  @at-root &--fsdev::before {
+    background-color: rgba(rgb(184, 2, 129), 0.3);
+  }
+
+  @at-root &--le::before {
+    background-color: rgba(rgb(6, 143, 125), 0.3);
+  }
+
+  @at-root &--mle::before {
+    background-color: rgba(rgb(197, 75, 4), 0.3);
+  }
+
+  @at-root &:hover::before {
+    transform: scaleY(0.9);
+  }
+}
