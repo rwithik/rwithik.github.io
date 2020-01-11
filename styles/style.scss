@@ -1,0 +1,19 @@
+@import "./partials/basic";
+
+.about-me {
+  font-family: "Fira Mono", sans-serif;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 0 3rem;
+
+  @at-root &__title {
+    font-family: "Raleway";
+  }
+
+  @at-root &__content {
+    max-width: 50%;
+    margin-right: auto;
+  }
+}
