@@ -99,6 +99,7 @@ a {
   background-image: linear-gradient(30deg, #5ce9e9, #85e22e);
   background-clip: text;
   color: rgba(255, 255, 255, 0.7);
+  -webkit-background-clip: text;
   -webkit-transition: color 50ms ease-in;
   transition: color 50ms ease-in;
   cursor: pointer;
@@ -107,6 +108,7 @@ a {
 
 .navbar__item:hover {
   color: transparent;
+  -webkit-text-fill-color: transparent;
 }
 
 .navbar__item:hover::after {
@@ -149,7 +151,6 @@ a {
   }
   .navbar__item {
     color: white;
-    background-color: black;
   }
   .navbar__item:hover {
     color: white;

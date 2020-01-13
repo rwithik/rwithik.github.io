@@ -36,12 +36,14 @@
     );
     background-clip: text;
     color: rgba(white, 0.7);
+    -webkit-background-clip: text;
     transition: color 50ms ease-in;
     cursor: pointer;
     position: relative;
 
     @at-root &:hover {
       color: transparent;
+      -webkit-text-fill-color: transparent;
 
       @at-root &::after {
         content: "";
@@ -82,8 +84,6 @@
 
   .navbar__item {
     color: white;
-    background-color: black;
-    background-image: none;
 
     @at-root &:hover {
       color: white;
