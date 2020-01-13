@@ -13,6 +13,10 @@
   top: 0;
   font-family: "Fira Mono", sans-serif;
 
+  @at-root &-toggle {
+    display: none;
+  }
+
   @at-root &__logo {
     font-size: 1.6rem;
   }
@@ -34,9 +38,103 @@
     color: rgba(white, 0.7);
     transition: color 50ms ease-in;
     cursor: pointer;
+    position: relative;
 
     @at-root &:hover {
       color: transparent;
+
+      @at-root &::after {
+        content: "";
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background-image: linear-gradient(
+          -30deg,
+          rgb(92, 233, 233),
+          rgb(133, 226, 46)
+        );
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  .navbar__list {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000;
+    flex-direction: column;
+    align-items: center;
+    font-size: 3rem;
+    transform: translateX(100%);
+    transition: transform 250ms cubic-bezier(0.5, 0, 0.5, 1);
+    z-index: 10;
+
+    @at-root &--open {
+      transform: translateX(0);
+    }
+  }
+
+  .navbar__item {
+    color: white;
+    background-color: black;
+
+    @at-root &:hover {
+      color: white;
+
+      @at-root &::after {
+        display: none;
+      }
+    }
+  }
+
+  .navbar-toggle {
+    all: unset;
+    padding: 1rem 0.5rem;
+    z-index: 20;
+  }
+
+  .hamburger {
+    width: 35px;
+    height: 3px;
+    background-color: #fff;
+    border-radius: 2px;
+    position: relative;
+    display: block;
+    transition: transform 250ms ease-in-out;
+
+    @at-root &::before,
+      &::after {
+      content: "";
+      left: 0;
+      right: 0;
+      height: 100%;
+      background-color: #fff;
+      border-radius: 2px;
+      position: absolute;
+    }
+
+    @at-root &::before {
+      transform: translateY(8px);
+    }
+
+    @at-root &::after {
+      transform: translateY(-8px);
+    }
+
+    @at-root &--close {
+      transform: rotateZ(0.625turn);
+      @at-root &::before {
+        opacity: 0;
+      }
+      @at-root &::after {
+        transform: rotateZ(90deg);
+      }
     }
   }
 }

@@ -9,46 +9,68 @@
     <title>Hey!</title>
   </head>
   <body>
-    
     <!-- Navbar starts -->
     <nav class="navbar">
       <a href="./index.html">
-      	<div class="navbar__logo">&lt;rwithik /&gt;</div>
+        <div class="navbar__logo">&lt;rwithik/&gt;</div>
       </a>
+      <button class="navbar-toggle">
+        <span class="hamburger"></span>
+      </button>
       <ul class="navbar__list">
-        <li class="navbar__item"><a href='#about'>About me</a></li>
-        <li class="navbar__item"><a href='#projects'>Projects</a></li>
-        <li class="navbar__item"><a href='#contact'>Contact</a></li>
+        <li class="navbar__item"><a href="#about">About me</a></li>
+        <li class="navbar__item"><a href="#projects">Projects</a></li>
+        <li class="navbar__item"><a href="#contact">Contact me</a></li>
       </ul>
     </nav>
     <!-- Navbar ends -->
 
     <!-- About starts -->
-    <section class="about-me"id='about'>
+    <section class="about-me" id="about">
       <div class="about-me__content">
         <h2 class="about-me__title">Hey there,</h2>
-        <div class="about-me__subtitle"
-          >I'm rwithik,
+        <div class="about-me__subtitle">
+          I'm rwithik,
           <span class="subtitle__item subtitle__item--fsdev"
             >full-stack developer</span
           >,
           <span class="subtitle__item subtitle__item--le">linux enthusiast</span
           >,
           <span class="subtitle__item subtitle__item--mle">
-            machine learning enthusiast</span
-          >.</span
-        >
+            machine learning noob</span
+          >.
+        </div>
+        <div class="about-me__text">
+          While I'm not making websites, I'll either be tinkering with my
+          <a
+            href="https://github.com/rwithik/archrice"
+            class="about-me__link link--archrice"
+            >Linux setup</a
+          >, snooping around in
+          <a
+            href="https://github.com/rwithik"
+            class="about-me__link about-me__link--github"
+            >Github</a
+          >, or answering questions on
+          <a
+            href="https://stackoverflow.com/users/9549012/nullptr"
+            class="about-me__link about-me__link--stackoverflow"
+            >Stackoverflow</a
+          >.
+        </div>
       </div>
+
       <div class="about-me__img"><img src="" alt="" /></div>
     </section>
     <!-- About ends -->
 
     <!-- Projects starts -->
-    <section class="projects" id=projects></section>
+    <section class="projects" id="projects"></section>
     <!-- Projects ends -->
 
     <!-- Contact starts -->
     <section class="contact" id="contact"></section>
     <!-- Contact ends -->
   </body>
+  <script src="./scripts/main.js" defer></script>
 </html>
