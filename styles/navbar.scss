@@ -35,6 +35,7 @@
       rgb(133, 226, 46)
     );
     background-clip: text;
+    -webkit-background-clip: text;
     color: rgba(white, 0.7);
     transition: color 50ms ease-in;
     cursor: pointer;
