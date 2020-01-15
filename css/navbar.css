@@ -7,27 +7,19 @@
 }
 
 @font-face {
-  font-family: "Raleway";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: local("Raleway"), local("Raleway-Regular"), url(https://fonts.gstatic.com/s/raleway/v14/1Ptug8zYS_SKggPNyC0ISg.ttf) format("truetype");
-}
-
-@font-face {
-  font-family: "Roboto Condensed";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: local("Roboto Condensed"), local("RobotoCondensed-Regular"), url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19K7CA.ttf) format("truetype");
-}
-
-@font-face {
   font-family: "Lato";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
   src: local("Lato Regular"), local("Lato-Regular"), url(https://fonts.gstatic.com/s/lato/v16/S6uyw4BMUTPHjx4wWw.ttf) format("truetype");
+}
+
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local("Montserrat Regular"), local("Montserrat-Regular"), url(https://fonts.gstatic.com/s/montserrat/v14/JTUSjIg1_i6t8kCHKm459Wlhzg.ttf) format("truetype");
 }
 
 *,
@@ -50,11 +42,21 @@ body {
 
 section {
   min-height: 100vh;
+  padding-top: calc(10vh + 1rem);
 }
 
 a {
   text-decoration: none;
   color: currentColor;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Montserrat";
 }
 
 .navbar {
