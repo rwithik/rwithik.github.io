@@ -59,7 +59,7 @@ h6 {
   font-family: "Montserrat";
 }
 
-.about-me {
+.landing {
   font-family: "Fira Mono", sans-serif;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -77,27 +77,27 @@ h6 {
   padding: 0 3rem;
 }
 
-.about-me__title {
+.landing__title {
   font-family: "Montserrat";
 }
 
-.about-me__content {
+.landing__content {
   max-width: 50%;
   margin-right: auto;
 }
 
-.about-me__text {
+.landing__text {
   margin-top: 1rem;
   font-size: 1em;
   opacity: 0.7;
   font-family: "Lato", sans-serif;
 }
 
-.about-me__link {
+.landing__link {
   opacity: 0.7;
 }
 
-.about-me__link:hover {
+.landing__link:hover {
   opacity: 1;
 }
 
@@ -143,6 +143,34 @@ h6 {
           transform: scaleY(0.94);
 }
 
+@media only screen and (max-width: 900px) {
+  .landing {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+  .landing__content {
+    max-width: 70%;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  .landing__content {
+    max-width: 90%;
+  }
+}
+
+@media only screen and (max-width: 450px) {
+  .landing__content {
+    max-width: 100%;
+  }
+  .landing__subtitle {
+    margin-top: 1rem;
+    font-size: 0.9em;
+  }
+}
+
 .projects {
   padding-left: 2rem;
   padding-right: 1rem;
@@ -183,6 +211,33 @@ h6 {
   position: relative;
 }
 
+.card::after {
+  content: "";
+  position: absolute;
+  display: inline-block;
+  height: 2px;
+  width: 100%;
+  left: 0;
+  right: 0;
+  bottom: -8px;
+  -webkit-transform-origin: center center;
+          transform-origin: center center;
+  -webkit-transform: scaleX(0);
+          transform: scaleX(0);
+  opacity: 0;
+  background-color: #fff;
+  -webkit-transition: opacity 250ms ease-in-out, -webkit-transform 250ms ease-in-out;
+  transition: opacity 250ms ease-in-out, -webkit-transform 250ms ease-in-out;
+  transition: transform 250ms ease-in-out, opacity 250ms ease-in-out;
+  transition: transform 250ms ease-in-out, opacity 250ms ease-in-out, -webkit-transform 250ms ease-in-out;
+}
+
+.card:hover::after {
+  opacity: 1;
+  -webkit-transform: scale(1);
+          transform: scale(1);
+}
+
 .card__content {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -206,12 +261,22 @@ h6 {
 
 .card__link {
   position: absolute;
+}
+
+.card__link--github {
   right: 1rem;
   top: 1rem;
 }
 
+.card__link--demo {
+  right: 3rem;
+  top: 1rem;
+}
+
 .card__link > svg {
-  opacity: 0.7;
+  opacity: 0.5;
+  -webkit-transition: opacity 150ms cubic-bezier(0.55, 0.055, 0.675, 0.19);
+  transition: opacity 150ms cubic-bezier(0.55, 0.055, 0.675, 0.19);
 }
 
 .card__link:hover > svg {
@@ -230,31 +295,27 @@ h6 {
           transform: translateY(-8px);
 }
 
-@media only screen and (max-width: 900px) {
-  .about-me {
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-        -ms-flex-direction: column;
-            flex-direction: column;
-  }
-  .about-me__content {
-    max-width: 70%;
-  }
+.about {
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
-@media only screen and (max-width: 700px) {
-  .about-me__content {
-    max-width: 90%;
-  }
+.about__title {
+  margin-bottom: 1rem;
 }
 
-@media only screen and (max-width: 450px) {
-  .about-me__content {
-    max-width: 100%;
-  }
-  .about-me__subtitle {
-    margin-top: 1rem;
-    font-size: 0.9em;
-  }
+.about__content, .about__skills {
+  font-family: "Lato", sans-serif;
+}
+
+.about__content {
+  width: 60%;
+  opacity: 0.8;
+  margin-bottom: 1rem;
+}
+
+.about__skills {
+  list-style: none;
+  line-height: 1.6em;
 }
 /*# sourceMappingURL=style.css.map */

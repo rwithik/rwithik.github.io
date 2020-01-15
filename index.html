@@ -25,11 +25,11 @@
     </nav>
     <!-- Navbar ends -->
 
-    <!-- About starts -->
-    <section class="about-me" id="about">
-      <div class="about-me__content">
-        <h2 class="about-me__title">Hey there,</h2>
-        <div class="about-me__subtitle">
+    <!-- Landing starts -->
+    <section class="landing">
+      <div class="landing__content">
+        <h2 class="landing__title">Hey there,</h2>
+        <div class="landing__subtitle">
           I'm rwithik,
           <span class="subtitle__item subtitle__item--fsdev"
             >full-stack developer</span
@@ -40,28 +40,49 @@
             machine learning noob</span
           >.
         </div>
-        <div class="about-me__text">
+        <div class="landing__text">
           While I'm not making websites, I'll either be tinkering with my
           <a
             href="https://github.com/rwithik/archrice"
-            class="about-me__link link--archrice"
+            class="landing__link link--archrice"
             >Linux setup</a
           >, snooping around in
           <a
             href="https://github.com/rwithik"
-            class="about-me__link about-me__link--github"
+            class="landing__link landing__link--github"
             >Github</a
           >, or answering questions on
           <a
             href="https://stackoverflow.com/users/9549012/nullptr"
-            class="about-me__link about-me__link--stackoverflow"
+            class="landing__link landing__link--stackoverflow"
             >Stackoverflow</a
           >.
         </div>
       </div>
 
-      <div class="about-me__img"><img src="" alt="" /></div>
+      <div class="landing__img"><img src="" alt="" /></div>
     </section>
+    <!-- Landing ends -->
+
+    <!-- About starts -->
+    <!-- <section class="about" id="about">
+      <h3 class="about__title">About Me</h3>
+      <div class="about__content">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit
+        laudantium officiis, cumque ad id facilis sapiente obcaecati libero
+        illum ab, molestias odio. Rem praesentium unde placeat, quaerat ratione
+        quis suscipit?
+      </div>
+      <ul class="about__skills">
+        Technologies I've worked with include:
+        <li class="skills__item">HTML &amp; (S)CSS</li>
+        <li class="skills__item">Javascript</li>
+        <li class="skills__item">React</li>
+        <li class="skills__item">React Native</li>
+        <li class="skills__item">Node</li>
+        <li class="skills__item">Python</li>
+      </ul>
+    </section> -->
     <!-- About ends -->
 
     <!-- Projects starts -->
@@ -72,7 +93,10 @@
           <div class="card__content">
             <div class="card__title">
               flash.py
-              <a class="card__link" href="https://github.com/rwithik/flash.py">
+              <a
+                class="card__link card__link--github"
+                href="https://github.com/rwithik/flash.py"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   role="img"
@@ -98,7 +122,10 @@
           <div class="card__content">
             <div class="card__title">
               stars.sh
-              <a class="card__link" href="https://github.com/rwithik/stars.sh">
+              <a
+                class="card__link card__link--github"
+                href="https://github.com/rwithik/stars.sh"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   role="img"
@@ -125,7 +152,35 @@
             <div class="card__title">
               homepage
               <a
-                class="card__link"
+                class="card__link card__link--demo"
+                href="https://rwithik.github.io/homepage-frontend"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  height="24"
+                >
+                  <path
+                    stroke="transparent"
+                    fill="whitesmoke"
+                    d="M19,21H5c-1.1,0-2-0.9-2-2V5c0-1.1,0.9-2,2-2h7v2H5v14h14v-7h2v7C21,20.1,20.1,21,19,21z"
+                  />
+                  <path
+                    stroke="transparent"
+                    fill="whitesmoke"
+                    d="M21 10L19 10 19 5 14 5 14 3 21 3z"
+                  />
+                  <path
+                    stroke="transparent"
+                    fill="whitesmoke"
+                    d="M6.7 8.5H22.3V10.5H6.7z"
+                    transform="rotate(-45.001 14.5 9.5)"
+                  />
+                </svg>
+              </a>
+              <a
+                class="card__link card__link--github"
                 href="https://github.com/rwithik/homepage-frontend"
               >
                 <svg
@@ -153,7 +208,38 @@
           <div class="card__content">
             <div class="card__title">
               tedxcet.com
-              <a class="card__link" href="https://github.com/rwithik/tedxcet">
+              <a
+                class="card__link card__link--demo"
+                href="https://rwithik.github.io/tedxcet"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  height="24"
+                >
+                  <path
+                    stroke="transparent"
+                    fill="whitesmoke"
+                    d="M19,21H5c-1.1,0-2-0.9-2-2V5c0-1.1,0.9-2,2-2h7v2H5v14h14v-7h2v7C21,20.1,20.1,21,19,21z"
+                  />
+                  <path
+                    stroke="transparent"
+                    fill="whitesmoke"
+                    d="M21 10L19 10 19 5 14 5 14 3 21 3z"
+                  />
+                  <path
+                    stroke="transparent"
+                    fill="whitesmoke"
+                    d="M6.7 8.5H22.3V10.5H6.7z"
+                    transform="rotate(-45.001 14.5 9.5)"
+                  />
+                </svg>
+              </a>
+              <a
+                class="card__link card__link--github"
+                href="https://github.com/rwithik/tedxcet"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   role="img"
@@ -179,7 +265,38 @@
           <div class="card__content">
             <div class="card__title">
               teslacet
-              <a class="card__link" href="https://github.com/rwithik/teslacet">
+              <a
+                class="card__link card__link--demo"
+                href="https://rwithik.github.io/teslacet"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  height="24"
+                >
+                  <path
+                    stroke="transparent"
+                    fill="whitesmoke"
+                    d="M19,21H5c-1.1,0-2-0.9-2-2V5c0-1.1,0.9-2,2-2h7v2H5v14h14v-7h2v7C21,20.1,20.1,21,19,21z"
+                  />
+                  <path
+                    stroke="transparent"
+                    fill="whitesmoke"
+                    d="M21 10L19 10 19 5 14 5 14 3 21 3z"
+                  />
+                  <path
+                    stroke="transparent"
+                    fill="whitesmoke"
+                    d="M6.7 8.5H22.3V10.5H6.7z"
+                    transform="rotate(-45.001 14.5 9.5)"
+                  />
+                </svg>
+              </a>
+              <a
+                class="card__link card__link--github"
+                href="https://github.com/rwithik/teslacet"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   role="img"
