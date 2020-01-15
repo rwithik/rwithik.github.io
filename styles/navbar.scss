@@ -37,26 +37,33 @@
     background-clip: text;
     color: rgba(white, 0.7);
     -webkit-background-clip: text;
-    transition: color 50ms ease-in;
+    transition: color 250ms ease-in-out,
+      -webkit-text-fill-color 250ms ease-in-out;
     cursor: pointer;
     position: relative;
 
+    @at-root &::after {
+      content: "";
+      position: absolute;
+      opacity: 0;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background-image: linear-gradient(
+        -30deg,
+        rgb(92, 233, 233),
+        rgb(133, 226, 46)
+      );
+      transition: opacity 250ms ease-in-out;
+    }
+
     @at-root &:hover {
-      color: transparent;
-      -webkit-text-fill-color: transparent;
+      color: rgba(white, 0.1);
+      -webkit-text-fill-color: rgba(white, 0.1);
 
       @at-root &::after {
-        content: "";
-        position: absolute;
-        bottom: -1px;
-        left: 0;
-        right: 0;
-        height: 1px;
-        background-image: linear-gradient(
-          -30deg,
-          rgb(92, 233, 233),
-          rgb(133, 226, 46)
-        );
+        opacity: 1;
       }
     }
   }
