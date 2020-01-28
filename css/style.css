@@ -79,6 +79,25 @@ h6 {
 
 .landing__title {
   font-family: "Montserrat";
+  opacity: 0;
+  -webkit-transform: translateY(50px);
+          transform: translateY(50px);
+  -webkit-transition: opacity 250ms ease-in-out, -webkit-transform 250ms ease-in-out;
+  transition: opacity 250ms ease-in-out, -webkit-transform 250ms ease-in-out;
+  transition: transform 250ms ease-in-out, opacity 250ms ease-in-out;
+  transition: transform 250ms ease-in-out, opacity 250ms ease-in-out, -webkit-transform 250ms ease-in-out;
+}
+
+.landing__subtitle {
+  opacity: 0;
+  -webkit-transform: translateX(50px);
+          transform: translateX(50px);
+  -webkit-transition: opacity 250ms ease-in-out, -webkit-transform 250ms ease-in-out;
+  transition: opacity 250ms ease-in-out, -webkit-transform 250ms ease-in-out;
+  transition: transform 250ms ease-in-out, opacity 250ms ease-in-out;
+  transition: transform 250ms ease-in-out, opacity 250ms ease-in-out, -webkit-transform 250ms ease-in-out;
+  -webkit-transition-delay: 250ms;
+          transition-delay: 250ms;
 }
 
 .landing__content {
@@ -89,7 +108,15 @@ h6 {
 .landing__text {
   margin-top: 1rem;
   font-size: 1em;
-  opacity: 0.7;
+  opacity: 0;
+  -webkit-transform: translateX(50px);
+          transform: translateX(50px);
+  -webkit-transition: opacity 250ms ease-in-out, -webkit-transform 250ms ease-in-out;
+  transition: opacity 250ms ease-in-out, -webkit-transform 250ms ease-in-out;
+  transition: transform 250ms ease-in-out, opacity 250ms ease-in-out;
+  transition: transform 250ms ease-in-out, opacity 250ms ease-in-out, -webkit-transform 250ms ease-in-out;
+  -webkit-transition-delay: 650ms;
+          transition-delay: 650ms;
   font-family: "Lato", sans-serif;
 }
 
@@ -204,10 +231,13 @@ h6 {
   -webkit-box-shadow: 0 0 15px #161616;
           box-shadow: 0 0 15px #161616;
   border-radius: 4px;
-  -webkit-transition: -webkit-transform 250ms ease-in-out;
-  transition: -webkit-transform 250ms ease-in-out;
-  transition: transform 250ms ease-in-out;
-  transition: transform 250ms ease-in-out, -webkit-transform 250ms ease-in-out;
+  opacity: 0;
+  -webkit-transform: translateY(50px);
+          transform: translateY(50px);
+  -webkit-transition: opacity 250ms ease-in-out, -webkit-transform 250ms ease-in-out;
+  transition: opacity 250ms ease-in-out, -webkit-transform 250ms ease-in-out;
+  transition: transform 250ms ease-in-out, opacity 250ms ease-in-out;
+  transition: transform 250ms ease-in-out, opacity 250ms ease-in-out, -webkit-transform 250ms ease-in-out;
   position: relative;
 }
 
@@ -317,5 +347,11 @@ h6 {
 .about__skills {
   list-style: none;
   line-height: 1.6em;
+}
+
+.fade-in {
+  -webkit-transform: translate(0);
+          transform: translate(0);
+  opacity: 1;
 }
 /*# sourceMappingURL=style.css.map */

@@ -8,6 +8,16 @@
 
   @at-root &__title {
     font-family: "Montserrat";
+    opacity: 0;
+    transform: translateY(50px);
+    transition: transform 250ms ease-in-out, opacity 250ms ease-in-out;
+  }
+
+  @at-root &__subtitle {
+    opacity: 0;
+    transform: translateX(50px);
+    transition: transform 250ms ease-in-out, opacity 250ms ease-in-out;
+    transition-delay: 250ms;
   }
 
   @at-root &__content {
@@ -18,7 +28,11 @@
   @at-root &__text {
     margin-top: 1rem;
     font-size: 1em;
-    opacity: 0.7;
+    opacity: 0;
+    transform: translateX(50px);
+    transition: transform 250ms ease-in-out, opacity 250ms ease-in-out;
+    transition-delay: 650ms;
+    // opacity: 0.7;
     font-family: "Lato", sans-serif;
   }
 

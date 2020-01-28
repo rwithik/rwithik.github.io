@@ -23,7 +23,9 @@
   background-color: $clr-secondary;
   box-shadow: 0 0 15px $clr-secondary;
   border-radius: 4px;
-  transition: transform 250ms ease-in-out;
+  opacity: 0;
+  transform: translateY(50px);
+  transition: transform 250ms ease-in-out, opacity 250ms ease-in-out;
   position: relative;
 
   @at-root &::after {
