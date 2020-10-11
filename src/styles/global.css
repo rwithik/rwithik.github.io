@@ -1,0 +1,58 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato&family=Montserrat:wght@400;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@500&display=swap");
+
+:root {
+  --clr-primary: #181818;
+  --clr-accent: #7205ff;
+  --bc: #eeeeee;
+  --ht-slant: 20vh;
+  --gradient-accent: linear-gradient(133deg, #7205ff, #570bb9);
+}
+
+*,
+*::before,
+*::after {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  /* outline: 1px solid olive; */
+}
+
+body {
+  background-color: var(--bc);
+  font-family: "Lato", "sans-serif";
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: "Montserrat", sans-serif;
+}
+
+a {
+  color: currentColor;
+  text-decoration: none;
+}
+
+section {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding-top: 10vh;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  /* justify-content: center; */
+  /* align-items: center; */
+}
+
+.highlight {
+  color: var(--clr-accent);
+}
+
+@media only screen and (max-width: 600px) {
+  :root {
+    --ht-slant: 0px;
+  }
+}

@@ -1,0 +1,25 @@
+.navbar {
+  position: fixed;
+  height: 7vh;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  font-family: "Fira Code", monospace;
+  z-index: 1;
+  align-items: center;
+  background-color: #ffffff88;
+}
+
+.logo {
+  font-size: 1.5em;
+  margin-left: 1rem;
+}
+
+.navList {
+  list-style: none;
+  display: flex;
+  width: 40%;
+  margin-right: 1rem;
+  justify-content: space-between;
+  align-items: center;
+}

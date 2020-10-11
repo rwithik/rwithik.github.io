@@ -1,0 +1,9 @@
+.projects {
+  background-color: var(--clr-accent);
+  color: var(--bc);
+}
+
+.title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}

@@ -1,0 +1,13 @@
+.landing {
+  padding-left: 15vw;
+  padding-top: 25vh;
+  min-height: calc(100vh - var(--ht-slant, 0));
+  color: var(--clr-primary);
+}
+.title {
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+.subtitle {
+  font-size: 1.5rem;
+}
