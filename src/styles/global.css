@@ -4,9 +4,15 @@
 :root {
   --clr-primary: #181818;
   --clr-accent: #7205ff;
-  --bc: #eeeeee;
+  --clr-bc-light: rgba(238, 238, 238, 0.4);
+  --clr-bc-dark: rgba(238, 238, 238, 0.8);
+  --cb-transition: cubic-bezier(0.215, 0.61, 0.355, 1);
+  --bc: rgb(238, 238, 238);
   --ht-slant: 20vh;
   --gradient-accent: linear-gradient(133deg, #7205ff, #570bb9);
+  --ff-main: "Lato", "sans-serif";
+  --ff-title: "Montserrat", "sans-serif";
+  --ff-monospace: "Fira Code", "monospace";
 }
 
 *,
@@ -15,12 +21,11 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  /* outline: 1px solid olive; */
 }
 
 body {
   background-color: var(--bc);
-  font-family: "Lato", "sans-serif";
+  font-family: var(--ff-main);
 }
 
 h1,
@@ -28,7 +33,7 @@ h2,
 h3,
 h4,
 h5 {
-  font-family: "Montserrat", sans-serif;
+  font-family: var(--ff-title);
 }
 
 a {
@@ -43,8 +48,6 @@ section {
   padding-top: 10vh;
   padding-left: 1rem;
   padding-right: 1rem;
-  /* justify-content: center; */
-  /* align-items: center; */
 }
 
 .highlight {

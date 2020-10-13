@@ -1,9 +1,17 @@
 .projects {
   background-color: var(--clr-accent);
   color: var(--bc);
+  padding-bottom: 3rem;
 }
 
 .title {
   font-size: 2rem;
   margin-bottom: 1rem;
+}
+
+.cardContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
 }

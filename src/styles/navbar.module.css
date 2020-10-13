@@ -4,7 +4,7 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
-  font-family: "Fira Code", monospace;
+  font-family: var(--ff-monospace);
   z-index: 1;
   align-items: center;
   background-color: #ffffff88;

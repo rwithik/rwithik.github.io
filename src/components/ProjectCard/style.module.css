@@ -1,0 +1,33 @@
+.card {
+  position: relative;
+  height: 300px;
+  width: 250px;
+  padding: 1rem;
+  margin: 0.5rem;
+  background-color: var(--bc);
+  color: var(--clr-accent);
+  border-radius: 7px;
+  transform: scale(1);
+  box-shadow: 0 0 8px var(--clr-bc-dark);
+  transition: box-shadow 200ms var(--cb-transition),
+    transform 200ms var(--cb-transition);
+}
+
+.card:hover {
+  box-shadow: 0 0 14px var(--clr-bc-dark);
+}
+
+.title {
+  font-size: 1.5rem;
+}
+
+.githubLink,
+.link {
+  opacity: 0.6;
+  transition: opacity 200ms var(--cb-transition);
+}
+
+.githubLink:hover,
+.link:hover {
+  opacity: 1;
+}

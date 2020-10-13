@@ -1,0 +1,36 @@
+[
+  {
+    "title": "Easy Acres",
+    "description": "The site for Easy Acres",
+    "link": "https://rwithik.github.io/easyacres",
+    "github": "https://github.com/rwithik/easyacres",
+    "tags": ["HTML", "JS", "CSS"]
+  },
+  {
+    "title": "TeslaCET'20",
+    "description": "The site for TeslaCET, the technical fest of EEE department, CET",
+    "link": "https://rwithik.github.io/teslacet",
+    "github": "https://github.com/rwithik/teslacet",
+    "tags": ["HTML", "JS", "CSS"]
+  },
+  {
+    "title": "Cows and Bulls",
+    "description": "The web version of a number game we used to play in class",
+    "link": "pending",
+    "github": "pending",
+    "tags": ["HTML", "JS", "CSS", "socket.io", "Node.js", "Express.js"]
+  },
+  {
+    "title": "Homepage",
+    "description": "A custom new tab page I use daily",
+    "link": "https://rwithik.github.io/homepage-frontend",
+    "github": "https://github.com/rwithik/homepage-frontend",
+    "tags": ["HTML", "JS", "CSS"]
+  },
+  {
+    "title": "stars.sh",
+    "description": "An eye-candy script to show randomly generated stars on your terminal",
+    "github": "https://github.com/rwithik/stars.sh",
+    "tags": ["shell", "linux"]
+  }
+]
