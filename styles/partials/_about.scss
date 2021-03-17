@@ -1,36 +1,36 @@
 .about {
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding-left: 3rem;
+  padding-right: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 
-  @at-root &__title {
+  &__title {
     margin-bottom: 1rem;
-    //   display: inline-block;
-    //   position: relative;
-    //   @at-root &::after {
-    //     content: "";
-    //     position: absolute;
-    //     display: inline-block;
-    //     width: 100%;
-    //     height: 1px;
-    //     top: 35%;
-    //     left: 105%;
-    //     background-color: rgba($clr-primary, 0.3);
-    //   }
+    font-size: 1.5em;
+    display: inline-block;
+    position: relative;
   }
 
-  @at-root &__content,
-    &__skills {
+  &__content,
+  &__skills {
     font-family: "Lato", sans-serif;
   }
 
-  @at-root &__content {
+  &__content {
     width: 60%;
-    opacity: 0.8;
     margin-bottom: 1rem;
+    @media screen and (max-width: 400px) {
+      width: 100%;
+    }
   }
 
-  @at-root &__skills {
+  &__skills {
     list-style: none;
     line-height: 1.6em;
+
+    li.skills__item {
+      padding-left: 1rem;
+    }
   }
 }

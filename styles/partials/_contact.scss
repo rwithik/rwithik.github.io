@@ -1,0 +1,40 @@
+.contact {
+  max-height: 50vh;
+  min-height: 50vh;
+  padding-left: 3rem;
+
+  &__title {
+    font-size: 1.5em;
+  }
+
+  &__socials {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    @media screen and (max-width: 400px) {
+      flex-direction: column;
+    }
+  }
+
+  &__link {
+    margin: 3rem;
+    @media screen and (max-width: 400px) {
+      margin: 1rem;
+    }
+  }
+}
+
+.icon {
+  height: 40px;
+  width: 40px;
+  &--mail {
+    fill: rgb(255, 188, 188);
+  }
+  &--linkedin {
+    fill: rgb(163, 154, 248);
+  }
+  &--github {
+    fill: rgb(255, 158, 255);
+  }
+}

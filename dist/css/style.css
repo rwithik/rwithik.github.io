@@ -326,12 +326,25 @@ h6 {
 }
 
 .about {
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding-left: 3rem;
+  padding-right: 3rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
 
 .about__title {
   margin-bottom: 1rem;
+  font-size: 1.5em;
+  display: inline-block;
+  position: relative;
 }
 
 .about__content, .about__skills {
@@ -340,13 +353,80 @@ h6 {
 
 .about__content {
   width: 60%;
-  opacity: 0.8;
   margin-bottom: 1rem;
+}
+
+@media screen and (max-width: 400px) {
+  .about__content {
+    width: 100%;
+  }
 }
 
 .about__skills {
   list-style: none;
   line-height: 1.6em;
+}
+
+.about__skills li.skills__item {
+  padding-left: 1rem;
+}
+
+.contact {
+  max-height: 50vh;
+  min-height: 50vh;
+  padding-left: 3rem;
+}
+
+.contact__title {
+  font-size: 1.5em;
+}
+
+.contact__socials {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+@media screen and (max-width: 400px) {
+  .contact__socials {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+}
+
+.contact__link {
+  margin: 3rem;
+}
+
+@media screen and (max-width: 400px) {
+  .contact__link {
+    margin: 1rem;
+  }
+}
+
+.icon {
+  height: 40px;
+  width: 40px;
+}
+
+.icon--mail {
+  fill: #ffbcbc;
+}
+
+.icon--linkedin {
+  fill: #a39af8;
+}
+
+.icon--github {
+  fill: #ff9eff;
 }
 
 .fade-in {
