@@ -13,6 +13,7 @@
   --ff-main: "Lato", "sans-serif";
   --ff-title: "Montserrat", "sans-serif";
   --ff-monospace: "Fira Code", "monospace";
+  --icon-scale: 0.8;
 }
 
 *,
@@ -26,6 +27,7 @@
 body {
   background-color: var(--bc);
   font-family: var(--ff-main);
+  line-height: 1.5;
 }
 
 h1,
@@ -38,7 +40,7 @@ h5 {
 
 a {
   color: currentColor;
-  text-decoration: none;
+  text-decoration: underline;
 }
 
 section {
@@ -46,8 +48,8 @@ section {
   display: flex;
   flex-direction: column;
   padding-top: 10vh;
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding-left: 3rem;
+  padding-right: 3rem;
 }
 
 .highlight {
@@ -58,4 +60,87 @@ section {
   :root {
     --ht-slant: 0px;
   }
+}
+
+.title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+/* Icons */
+
+/* URL Icon */
+
+.gg-link {
+  box-sizing: border-box;
+  position: relative;
+  display: block;
+  transform: rotate(-45deg) scale(var(--icon-scale, 1));
+  width: 8px;
+  height: 2px;
+  background: currentColor;
+  border-radius: 4px;
+}
+
+.gg-link::after,
+.gg-link::before {
+  content: "";
+  display: block;
+  box-sizing: border-box;
+  position: absolute;
+  border-radius: 3px;
+  width: 8px;
+  height: 10px;
+  border: 2px solid;
+  top: -4px;
+}
+
+.gg-link::before {
+  border-right: 0;
+  border-top-left-radius: 40px;
+  border-bottom-left-radius: 40px;
+  left: -6px;
+}
+
+.gg-link::after {
+  border-left: 0;
+  border-top-right-radius: 40px;
+  border-bottom-right-radius: 40px;
+  right: -6px;
+}
+
+/* Code Icon */
+.gg-code-slash {
+  display: block;
+  position: relative;
+  box-sizing: border-box;
+  transform: rotate(15deg) scale(var(--icon-scale, 1));
+  width: 2px;
+  height: 16px;
+  background: currentColor;
+}
+
+.gg-code-slash::after,
+.gg-code-slash::before {
+  content: "";
+  display: block;
+  box-sizing: border-box;
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  transform: rotate(-60deg);
+}
+
+.gg-code-slash::before {
+  border-left: 2px solid;
+  border-top: 2px solid;
+  left: -8px;
+  top: 5px;
+}
+
+.gg-code-slash::after {
+  border-right: 2px solid;
+  border-bottom: 2px solid;
+  right: -8px;
+  top: 3px;
 }

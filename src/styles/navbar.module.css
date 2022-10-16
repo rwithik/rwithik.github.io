@@ -8,6 +8,7 @@
   z-index: 1;
   align-items: center;
   background-color: #ffffff88;
+  backdrop-filter: blur(8px);
 }
 
 .logo {
@@ -22,4 +23,11 @@
   margin-right: 1rem;
   justify-content: space-between;
   align-items: center;
+}
+
+.navLink {
+  transition: color 300ms var(--cb-transition);
+}
+.navLink:hover {
+  color: var(--clr-accent);
 }

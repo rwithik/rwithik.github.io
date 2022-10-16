@@ -5,15 +5,14 @@ import styles from "../styles/landing.module.css"
 export default function About() {
   return (
     <section className={styles.landing} id="landing">
+      <h2 className={styles.subtitle}>Hi, I'm </h2>
       <h1 className={styles.title}>
-        Hi, my name is <span className="highlight">Rwithik Manoj</span>!
+        <span className="highlight">Rwithik Manoj</span>
       </h1>
       <h2 className={styles.subtitle}>
         And I'm a{" "}
         <span className="highlight">
-          <TypeWriter
-            strings={["React developer", "Web developer", "Linux enthusiast"]}
-          />
+          <TypeWriter strings={["Fullstack Developer", "Linux Enthusiast"]} />
         </span>
       </h2>
     </section>
