@@ -1,0 +1,404 @@
+---
+title: "Type Level Tic-Tac-Toe"
+description: ""
+pubDate: "Jun 01 2024"
+---
+
+The TypeScript type system is honestly pretty simple and straighforward, but it is also Turing Complete. I mean the type system in itself, not TypeScript as a whole. That means the TS type system can do anything a proper "programming language" can do. I say "programming language" in quotes, because today, we're programming with the type system!
+
+Like the title, we're making a Tic-Tac-Toe game with just the type system.
+
+First of all, a few basics:
+
+1. The TypeScript type system has subsets and supersets within types. For example
+
+   - the type `1` is a subset of the type `number`, so it `1 | 2 | 3`
+   - similarly, the `boolean` type is a superset with two element `true` and `false`
+
+2. Generics are kindof like functions, we'll be using this a lot
+
+3. Tuples are fixed size arrays, and we can access elements in a tuple/array with the bracket notation, like we do in JS. So if you have a tuple type `type T = [number, string, boolean]`, `T[0]` evaluates to the `number` type.
+
+4. There are no mutable variables in the TypeScript type system, meaning we can't assign a value to a variable and update it later.
+
+With all that out of the way, let's get started.
+
+First, we define the players
+
+```typescript
+type PlayerX = "X";
+type PlayerO = "O";
+
+type Player = PlayerX | PlayerO;
+```
+
+And every cell can have either a player, or can be blank.
+
+```typescript
+type Cell = Player | " ";
+```
+
+A Row is a tuple of three cells(Tuples are just fixed size arrays)
+
+```typescript
+type Row = [Cell, Cell, Cell];
+```
+
+And a board is a tuple of three rows
+
+```typescript
+type Board = [Row, Row, Row];
+```
+
+Now we're finally getting to the good part, the logic for checking who won the board. A player wins when they satisfy one of the following conditions:
+
+- The player has filled all the cells in a row
+
+- The player has filled all the cells in a column
+
+- The player has filled all the cells on either diagonal
+
+Let's start with the easiest one, checking along a row
+
+```typescript
+type CheckRowWinForPlayer<R extends Row, P extends Player> = R[0] extends P
+  ? R[1] extends P
+    ? R[2] extends P
+      ? true
+      : false
+    : false
+  : false;
+```
+
+Remember when I said that generics are like functions? This is one example and we're just getting started.
+
+The `extends` keyword can be used in two different ways. One is as a type constraint, like in `CheckRowWinForPlayer<R extends Row, P extends Player>`. This just means that the types passed as R and P have to be assignable to the types `Row` and `Player`. The seconds way is in a conditional, like in `U extends V ? A : B`. This is going to evaluate to the type `A` is the type `U` can be assignable to `V`, and `B` if it can't. This is largely how we will be able to write logic in the TypeScript type system.
+
+In the above snippet, we define a generic type, `CheckRowWinForPlayer`, that takes two parameters, a `Row` , `R` and a `Player` , `P`, and checks if all three cells in `R` is `P`. If they are, it evaluates to `true`, if not, `false`. Keep in mind that `true` and `false` are largely arbitrary here, we can also use `1` and `2` or `'a'` and `'b'` (or even `1` and `'a'` if you hate yourself). We just need two distinct values. I'm just going to use `true` and `false` to keep things simple.
+
+We'll just write one more generic to figure out which player won for a row. It's just a wrapper on the previous generic.
+
+```typescript
+type CheckRowWin<R extends Row> = CheckRowWinForPlayer<R, PlayerX> extends true
+  ? PlayerX
+  : CheckRowWinForPlayer<R, PlayerO> extends true
+  ? PlayerO
+  : never;
+```
+
+This should be a bit easier to understand- we call `CheckRowWinForPlayer` on the row, for each player and if they evaluate to true, return that player.
+
+As you might have noticed, we're going to write a lot of conditionals like these, so let's make an `If` generic that abstracts that away.
+
+```typescript
+type If<Condition extends boolean, TrueExpr, FalseExpr> = Condition extends true
+  ? TrueExpr
+  : FalseExpr;
+```
+
+And we'll refactor `CheckRowWin` to use `If`.
+
+```typescript
+type CheckRowWin<R extends Row> = If<
+  CheckRowWinForPlayer<R, PlayerX>,
+  PlayerX,
+  If<CheckRowWinForPlayer<R, PlayerO>, PlayerO, never>
+>;
+```
+
+Now, we'll move on to the column checks, it's a tiny bit more complicated since we need access to the whole board, but still pretty straight forward.
+
+```typescript
+type Columns = 0 | 1 | 2;
+
+type CheckColWinForPlayer<
+  B extends Board,
+  Col extends Columns,
+  P extends Player
+> = B[0][Col] extends P
+  ? B[1][Col] extends P
+    ? B[2][Col] extends P
+      ? true
+      : false
+    : false
+  : false;
+
+type CheckColWin<B extends Board, Col extends Columns> = If<
+  CheckColWinForPlayer<B, Col, PlayerX>,
+  PlayerX,
+  If<CheckColWinForPlayer<B, Col, PlayerO>, PlayerO, never>
+>;
+```
+
+Pretty similar to the logic for the rows, we just have another parameter for the column index. `Columns` is just a type for the valid column indexes.
+
+Next up, the diagonals
+
+```typescript
+type CheckLeadingDiagonalWinForPlayer<
+  B extends Board,
+  P extends Player
+> = B[0][0] extends P
+  ? B[1][1] extends P
+    ? B[2][2] extends P
+      ? true
+      : false
+    : false
+  : false;
+
+type CheckOtherDiagonalWinForPlayer<
+  B extends Board,
+  P extends Player
+> = B[0][2] extends P
+  ? B[1][1] extends P
+    ? B[2][0] extends P
+      ? true
+      : false
+    : false
+  : false;
+
+type CheckDiagonalWinForPlayer<B extends Board, P extends Player> = If<
+  CheckLeadingDiagonalWinForPlayer<B, P>,
+  true,
+  If<CheckOtherDiagonalWinForPlayer<B, P>, true, false>
+>;
+```
+
+Again, pretty straightforward, we just have a check for each diagonal.
+
+We'll add some more generics to check if anyone has won on any row, column, or diagonal.
+
+```typescript
+type CheckAnyDiagonalWin<B extends Board> = If<
+  CheckDiagonalWinForPlayer<B, PlayerX>,
+  PlayerX,
+  If<CheckDiagonalWinForPlayer<B, PlayerO>, PlayerO, never>
+>;
+
+type CheckAnyRowWin<B extends Board> = CheckRowWin<B[0]> extends never
+  ? CheckRowWin<B[1]> extends never
+    ? CheckRowWin<B[2]> extends never
+      ? never
+      : CheckRowWin<B[2]>
+    : CheckRowWin<B[1]>
+  : CheckRowWin<B[0]>;
+
+type CheckAnyColWin<B extends Board> = CheckColWin<B, 0> extends never
+  ? CheckColWin<B, 1> extends never
+    ? CheckColWin<B, 2> extends never
+      ? never
+      : CheckColWin<B, 2>
+    : CheckColWin<B, 1>
+  : CheckColWin<B, 0>;
+```
+
+And finally, a `GetWinner` generic to get the winner, if there is one, for a board.
+
+```typescript
+type GetWinner<B extends Board> = CheckAnyRowWin<B> extends never
+  ? CheckAnyColWin<B> extends never
+    ? CheckAnyDiagonalWin<B> extends never
+      ? never
+      : CheckAnyDiagonalWin<B>
+    : CheckAnyColWin<B>
+  : CheckAnyRowWin<B>;
+```
+
+And that's it! You have a functioning Tic-Tac-Toe game using just the TypeScript type system and it compiles to nothing.
+
+```typescript
+type Winner1 = GetWinner<
+  [
+    //   ^? type Winner1 = "X"
+    ["X", "O", " "],
+    ["X", "X", " "],
+    ["O", "O", "X"]
+  ]
+>;
+
+type Winner2 = GetWinner<
+  [
+    // ^? type Winner1 = "X"
+    ["X", "O", "O"],
+    ["X", "O", " "],
+    ["X", "O", "X"]
+  ]
+>;
+
+type Winner3 = GetWinner<
+  [
+    // ^? type Winner1 = "X"
+    ["X", "X", "X"],
+    ["O", "O", " "],
+    ["O", "O", "X"]
+  ]
+>;
+
+type Winner4 = GetWinner<
+  [
+    // ^? type Winner1 = never
+    ["X", " ", "X"],
+    ["O", " ", " "],
+    ["O", "O", "X"]
+  ]
+>;
+```
+
+Here's the complete code, and you can check out the interactive demo in the playground [here.](https://www.typescriptlang.org/play/?#code/C4TwDgpgBACgNgQxBATgDSgXigcjTgbgChRJZFkUB5LXKwk8aeJVWlyjAH3NeuNLQAwhDhx2FNjxy5ijMkID2cAK4BbAHYBnWgEYoPAEwGoABjmCoAJUUB3WgG0RYgDRRncNx4C6FplAAhRQQUABNHG1s3SOi7XyJ5aABJADMAHiUNUIBLYGzFDSgIAA9gCCydACNFZQgEDTcAFRQVCABRYrAUNwAxBDgtds6UAD5aTJy8gqLS8tCdYBboAH4oZtaOrqgALig+gaGuvwUACwgAYwBrSIB1bI0exRQOVDSrGbKK6zs3GA+5nQvUZYIhQawOUzef5fGCgqCrKwOXRQkqfeawOEIhyGFGzGGYqCLVpw3YpfqDElQMkHSnUwZyAD0DMJ-iEZyut3ub2h6MiY0wRCZYPc7OudjuDyeQLev0k6DGqIBhKWguZYNWQLQquFuzZFzFtglj2ecplvEoVAVePRRIg2vV5tQVHtOygGggADdUMdhKLORpuYqvnyQWDUhk-eL7sbpVZZXw0CMXHCwZrk8KoOG9Ryo5KTXwzUDLemM47qCWM+6vSgU1ARnCRj6RfqlHAjVLTQEeTogiFQl5lN33Mp1NpfkOgfy4QEId4nMpcWjAQSZ8j53BF0rYQ6Zzj15v8Q7bbTyXawaTTyeDozmZZs5dWxK0l2g+je2EB+JXzpW6OtFOhTBe9H2jDsCwCT9404K0l2VYlAPhMstQQ3VRRAvNpQg4dPDLS0h2PBCNTlZ0ULdT1vQSO80OUJ8X2tHtgg-bCh1-TR-1DTN0mAmjQPzShn0gpD6wzKDUC1ETOIjFseIwztBKLYTS1E6hazBNwq1QEZG0o1lRQAGTqHINAAcwAEWyBBjIKfp2z4146Ng99+1gCc5SnMEZ0hWcJxXJE52RHyd2xOccUCxDj3PKlL0iukz1dWKm3vKhgDOFBzMs6y214zChyc8dvzLdzAlnYKwtWVd-IPdFt0Q3c50hMq4Lii8aRi6L4tPRLRXSqyNBs7LO1yxjnL+ArJw4rN9MM+4zIs3r+tk8DfiTWtbQrSSkpS1Aesy2zMOW9awTW1Sota4VFO0xJmyuABBDQQB2vqsoDBylScorJv1R6FpjOShPWtNa0+q5vue36ltwlbS1ww6yOrWsLq6-U7pAf1nyGvsivvNHPO8GClQ0msHWx3Nnz8-GvkJgkScNLk6op9EqYdJnXRp2jgsU1D9Rx8nKTZunZ0uqjkfu9D0YK96OO456BLMBmdBZ1ZpdotxdHluHUGp6iZawwx1cVjWidZ7WVagPW+ZNunVc566Hxk2XTCF-wAHEIGACV3RQcX6MCYasdFFGcf18ijaVgPRftgJg-h4nw4eubdrp6PNeZkOLZF+OMqe2ibfvFGxaj9PbvuoOmw9thsFd937k9tIHBdAA9ZYTuhjMHDwHA3Bwegu9wbxYdb4V2-wLuR9wPuB8HqB257uhO9wfBvBb1u8bLmvUGMSu3fLr367BIUm+Xwfh-n7vT-ofuj9bk+u9nmQcEvqfr472-T8Xq+M1XnSyB3gBmWgq47zrnCA+zcn7QxvgvN+D9J7HzPq-XuMCP6lhnufaBS9wHCi-ldHeAAWAB29167xAcyQ+mC24v3Hug2Bz8764EQY-chYJUEIKgRg8hq8gA)
+
+```typescript
+type PlayerX = "X";
+type PlayerO = "O";
+type Player = PlayerX | PlayerO;
+type Cell = Player | " ";
+
+type Columns = 1 | 2 | 0;
+
+type Row = [Cell, Cell, Cell];
+
+type Board = [Row, Row, Row];
+
+type If<Condition extends boolean, TrueExpr, FalseExpr> = Condition extends true
+  ? TrueExpr
+  : FalseExpr;
+
+type CheckRowWinForPlayer<R extends Row, P extends Player> = R[0] extends P
+  ? R[1] extends P
+    ? R[2] extends P
+      ? true
+      : false
+    : false
+  : false;
+
+// type CheckRowWin<R extends Row> =
+//   CheckRowWinForPlayer<R, PlayerX> extends true
+//   ? PlayerX
+//   : CheckRowWinForPlayer<R, PlayerO> extends true
+//   ? PlayerO
+//   : never;
+
+type CheckRowWin<R extends Row> = If<
+  CheckRowWinForPlayer<R, PlayerX>,
+  PlayerX,
+  If<CheckRowWinForPlayer<R, PlayerO>, PlayerO, never>
+>;
+
+type CheckColWinForPlayer<
+  B extends Board,
+  Col extends Columns,
+  P extends Player
+> = B[0][Col] extends P
+  ? B[1][Col] extends P
+    ? B[2][Col] extends P
+      ? true
+      : false
+    : false
+  : false;
+
+// type CheckColWin<B extends Board, Col extends Columns> =
+//   CheckColWinForPlayer<B, Col, PlayerX> extends true
+//   ? PlayerX
+//   : CheckColWinForPlayer<B, Col, PlayerO> extends true
+//   ? PlayerO
+//   : never;
+
+type CheckColWin<B extends Board, Col extends Columns> = If<
+  CheckColWinForPlayer<B, Col, PlayerX>,
+  PlayerX,
+  If<CheckColWinForPlayer<B, Col, PlayerO>, PlayerO, never>
+>;
+
+type CheckLeadingDiagonalWinForPlayer<
+  B extends Board,
+  P extends Player
+> = B[0][0] extends P
+  ? B[1][1] extends P
+    ? B[2][2] extends P
+      ? true
+      : false
+    : false
+  : false;
+
+type CheckOtherDiagonalWinForPlayer<
+  B extends Board,
+  P extends Player
+> = B[0][2] extends P
+  ? B[1][1] extends P
+    ? B[2][0] extends P
+      ? true
+      : false
+    : false
+  : false;
+
+type CheckDiagonalWinForPlayer<B extends Board, P extends Player> = If<
+  CheckLeadingDiagonalWinForPlayer<B, P>,
+  true,
+  If<CheckOtherDiagonalWinForPlayer<B, P>, true, false>
+>;
+
+type CheckAnyDiagonalWin<B extends Board> = If<
+  CheckDiagonalWinForPlayer<B, PlayerX>,
+  PlayerX,
+  If<CheckDiagonalWinForPlayer<B, PlayerO>, PlayerO, never>
+>;
+
+type CheckAnyRowWin<B extends Board> = CheckRowWin<B[0]> extends never
+  ? CheckRowWin<B[1]> extends never
+    ? CheckRowWin<B[2]> extends never
+      ? never
+      : CheckRowWin<B[2]>
+    : CheckRowWin<B[1]>
+  : CheckRowWin<B[0]>;
+
+type CheckAnyColWin<B extends Board> = CheckColWin<B, 0> extends never
+  ? CheckColWin<B, 1> extends never
+    ? CheckColWin<B, 2> extends never
+      ? never
+      : CheckColWin<B, 2>
+    : CheckColWin<B, 1>
+  : CheckColWin<B, 0>;
+
+type GetWinner<B extends Board> = CheckAnyRowWin<B> extends never
+  ? CheckAnyColWin<B> extends never
+    ? CheckAnyDiagonalWin<B> extends never
+      ? never
+      : CheckAnyDiagonalWin<B>
+    : CheckAnyColWin<B>
+  : CheckAnyRowWin<B>;
+
+type Winner = GetWinner<
+  [
+    //   ^?
+    ["X", "O", " "],
+    ["X", "X", " "],
+    ["O", "O", "X"]
+  ]
+>;
+
+type Winner2 = GetWinner<
+  [
+    // ^?
+    ["X", "O", "O"],
+    ["X", "O", " "],
+    ["X", "O", "X"]
+  ]
+>;
+
+type Winner3 = GetWinner<
+  [
+    // ^?
+    ["X", "X", "X"],
+    ["O", "O", " "],
+    ["O", "O", "X"]
+  ]
+>;
+
+type Winner4 = GetWinner<
+  [
+    // ^?
+    ["X", " ", "X"],
+    ["O", " ", " "],
+    ["O", "O", "X"]
+  ]
+>;
+```
