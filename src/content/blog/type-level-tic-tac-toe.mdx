@@ -8,7 +8,9 @@ import Tooltip from "../../components/Tooltip.astro";
 
 The TypeScript type system is honestly pretty straightforward on the surface, but it's also Turing Complete. I mean the type system itself, not TypeScript as a whole. That means the TS type system can do anything a proper "programming language" can do. I say "programming language" in quotes, because today, we're programming with the type system!
 
-Like the title says, we're making a Tic-Tac-Toe game with just the type system. The result will be a game that runs entirely on the type system and produces <Tooltip content='You might have a "use strict" in the compiled code depending on your tsconfig'>zero runtime code\*</Tooltip>.
+Like the title says, we're making a Tic-Tac-Toe game with just the type system. The result will be a game that runs entirely on the type system and produces zero runtime code[^runtime].
+
+[^runtime]: You might have a "use strict" in the compiled code depending on your tsconfig.
 
 ## Why do this?
 
@@ -36,7 +38,7 @@ type Identity<T> = T;
 type Result = Identity<string>; // Result is string;
 ```
 
-## Tuples and indexed access
+### Tuples and indexed access
 
 Tuples are fixed size arrays, and we can access elements in a tuple/array with the bracket notation, like we do in JS.
 

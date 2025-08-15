@@ -4,6 +4,7 @@ a {
   color: var(--accent);
   @apply underline;
 }
+
 a:hover {
   color: var(--foreground);
 }

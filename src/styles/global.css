@@ -9,6 +9,10 @@
     0 8px 24px rgba(var(--gray), 33%), 0 16px 32px rgba(var(--gray), 33%);
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 @font-face {
   font-family: "Atkinson";
   src: url("/fonts/atkinson-regular.woff") format("woff");
@@ -40,6 +44,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-items: start;
+  scroll-behavior: smooth;
 }
 
 main {
