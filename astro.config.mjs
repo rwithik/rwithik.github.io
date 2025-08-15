@@ -6,11 +6,29 @@ import tailwindcss from "@tailwindcss/vite";
 import remarkFootnotes from "remark-footnotes";
 // import remarkToc from "remark-toc";
 import remarkFootnotesCollect from "./src/remark-footnotes-collect";
+import opengraphImages, { presets } from "astro-opengraph-images";
+import * as fs from "fs";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://rwithik.github.io",
-  integrations: [mdx(), sitemap()],
+  site: "https://rwithik.me",
+  integrations: [
+    mdx(),
+    sitemap(),
+    opengraphImages({
+      options: {
+        fonts: [
+          {
+            name: "Atkinson",
+            weight: 400,
+            style: "normal",
+            data: fs.readFileSync("./public/fonts/atkinson-regular.woff"),
+          },
+        ],
+      },
+      render: presets.blackAndWhite,
+    }),
+  ],
   vite: {
     plugins: [tailwindcss()],
   },
