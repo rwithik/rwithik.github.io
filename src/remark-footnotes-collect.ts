@@ -14,10 +14,11 @@ export default function remarkFootnotesCollect() {
     let counter = 1;
     visit(tree, "footnoteReference", (node, index, parent) => {
       const number = counter++;
-      notes.push(noteMap.get(node.identifier));
+      notes.push({ number, node: noteMap.get(node.identifier) });
+
       parent.children[index] = {
         type: "html",
-        value: `<sup class="cursor-pointer"><a href="#footnotes">[${number}]</a></sup>`,
+        value: `<sup id="fnref-${number}" class="cursor-pointer"><a class="!no-underline !text-(--foreground)" href="#fn-${number}">[${number}]</a></sup>`,
       };
     });
 
@@ -26,17 +27,18 @@ export default function remarkFootnotesCollect() {
       tree.children.push({
         type: "html",
         value: `<section id="footnotes" class="py-4 border-t border-(--foreground-muted)">
-            <ol>
-              ${notes
-                .map(
-                  (note) =>
-                    `<li class="marker:text-(--foreground-muted)">${note.children
-                      .map(renderNode)
-                      .join("")}</li>`
-                )
-                .join("")}
-            </ol>
-          </section>`,
+          <ol>
+            ${notes
+              .map(
+                ({ number, node }) =>
+                  `<li id="fn-${number}" class="marker:text-(--foreground-muted)">
+                    ${node.children.map(renderNode).join("")}
+                    <a href="#fnref-${number}" class="ml-2 text-sm !no-underline !text-(--foreground-muted)">↩︎</a>
+                  </li>`
+              )
+              .join("")}
+          </ol>
+        </section>`,
       });
     }
   };
