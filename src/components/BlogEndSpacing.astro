@@ -1,32 +1,49 @@
 ---
-const TextOptions = [
-  ["/* Ergonomic padding for optimal code consumption */"],
-  ["Reading buffer zone activated"],
-  [
-    `// This space intentionally left blank`,
-    `// so your neck doesn't hate you while reading`,
-  ],
-  [`Keep scrolling at eye level`, `I got your posture covered`],
-  [`This blank space is doing more work`, `than most JavaScript frameworks`],
-  [
-    `Comfortable reading space`,
-    `because hunching over your screen is so ${new Date().getFullYear() - 1}`,
-  ],
-  [`Breathing room for your eyes`, `and your neck`],
-];
+// Empty frontmatter for static generation
 ---
 
 <div
   class="h-[calc(100vh-350px)] flex items-center justify-center text-(--foreground-muted)"
+  id="blog-end-spacing"
 >
-  {
-    TextOptions.at(Math.floor(Math.random() * TextOptions.length))?.map(
-      (line) => (
-        <>
-          {line}
-          <br />
-        </>
-      )
-    )
-  }
+  <div id="random-text"></div>
 </div>
+
+<script>
+  function getRandomText() {
+    const TextOptions = [
+      ["/* Ergonomic padding for optimal code consumption */"],
+      ["Reading buffer zone activated"],
+      [
+        "// This space intentionally left blank",
+        "// so your neck doesn't hate you while reading",
+      ],
+      ["Keep scrolling at eye level", "I got your posture covered"],
+      [
+        "This blank space is doing more work",
+        "than most JavaScript frameworks",
+      ],
+      [
+        "Comfortable reading space",
+        `because hunching over your screen is so ${new Date().getFullYear() - 1}`,
+      ],
+      ["Breathing room for your eyes", "and your neck"],
+    ];
+
+    return (
+      TextOptions[Math.floor(Math.random() * TextOptions.length)] ||
+      TextOptions[0]
+    );
+  }
+
+  // Generate and display random text when the page loads
+  document.addEventListener("DOMContentLoaded", () => {
+    const textContainer = document.getElementById("random-text");
+    if (textContainer) {
+      const randomText = getRandomText();
+      textContainer.innerHTML = randomText
+        .map((line) => `${line}<br>`)
+        .join("");
+    }
+  });
+</script>
