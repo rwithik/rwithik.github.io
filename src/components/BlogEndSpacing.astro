@@ -1,0 +1,32 @@
+---
+const TextOptions = [
+  ["/* Ergonomic padding for optimal code consumption */"],
+  ["Reading buffer zone activated"],
+  [
+    `// This space intentionally left blank`,
+    `// so your neck doesn't hate you while reading`,
+  ],
+  [`Keep scrolling at eye level`, `I got your posture covered`],
+  [`This blank space is doing more work`, `than most JavaScript frameworks`],
+  [
+    `Comfortable reading space`,
+    `because hunching over your screen is so ${new Date().getFullYear() - 1}`,
+  ],
+  [`Breathing room for your eyes`, `and your neck`],
+];
+---
+
+<div
+  class="h-[calc(100vh-350px)] flex items-center justify-center text-(--foreground-muted)"
+>
+  {
+    TextOptions.at(Math.floor(Math.random() * TextOptions.length))?.map(
+      (line) => (
+        <>
+          {line}
+          <br />
+        </>
+      )
+    )
+  }
+</div>

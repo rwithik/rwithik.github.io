@@ -1,5 +1,5 @@
 ---
-
+import HeaderLink from "./HeaderLink.astro";
 ---
 
 <header>
@@ -17,13 +17,13 @@
             label: "Blog",
             href: "/blog",
           },
-          {
-            id: 3,
-            label: "Socials",
-            href: "/socials",
-          },
+          // {
+          //   id: 3,
+          //   label: "Socials",
+          //   href: "/socials",
+          // },
         ].map((item) => {
-          return <a href={item.href}>{item.label}</a>;
+          return <HeaderLink href={item.href}>{item.label}</HeaderLink>;
         })
       }
     </div>

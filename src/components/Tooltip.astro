@@ -1,0 +1,65 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+type Placement = "top" | "right" | "bottom" | "left";
+
+interface Props extends HTMLAttributes<"div"> {
+  content?: string;
+  placement?: Placement;
+  id?: string;
+}
+
+const {
+  content,
+  placement = "top",
+  id = `tooltip-${Math.random().toString(36).slice(2)}`,
+  class: className,
+  ...attrs
+} = Astro.props as Props;
+
+const baseTooltipClasses = [
+  "absolute",
+  "z-50",
+  "px-2",
+  "py-1",
+  "text-sm",
+  "rounded",
+  "shadow",
+  "opacity-0",
+  "transition-opacity",
+  "duration-150",
+  "pointer-events-none",
+  "bg-(--foreground)",
+  "text-(--background)",
+  "group-hover:opacity-100",
+  "group-focus-within:opacity-100",
+  "w-[200px]",
+] as const;
+
+const placementClasses: Record<Placement, string[]> = {
+  top: ["bottom-full", "left-1/2", "-translate-x-1/2", "mb-2"],
+  bottom: ["top-full", "left-1/2", "-translate-x-1/2", "mt-2"],
+  left: ["right-full", "top-1/2", "-translate-y-1/2", "mr-2"],
+  right: ["left-full", "top-1/2", "-translate-y-1/2", "ml-2"],
+};
+---
+
+<span
+  class:list={[
+    "relative inline-block group cursor-pointer underline decoration-dotted decoration-0 underline-offset-1",
+    className,
+  ]}
+  {...attrs}
+>
+  <span aria-describedby={id}>
+    <slot />
+  </span>
+  <span
+    id={id}
+    role="tooltip"
+    class:list={[...baseTooltipClasses, ...placementClasses[placement]]}
+  >
+    {content}
+  </span>
+  <span class="sr-only" id={`${id}-sr`}>Tooltip</span>
+</span>

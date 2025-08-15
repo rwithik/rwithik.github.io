@@ -1,0 +1,127 @@
+@reference "tailwindcss";
+
+a {
+  color: var(--accent);
+  @apply underline;
+}
+a:hover {
+  color: var(--foreground);
+}
+
+code {
+  padding: 2px 5px;
+  background-color: #24292e;
+  border-radius: 2px;
+  font-family: monospace;
+}
+
+p {
+  line-height: 1.6;
+}
+
+pre {
+  padding: 1.5em;
+  border-radius: 8px;
+  font-family: monospace;
+}
+pre > code {
+  all: unset;
+}
+blockquote {
+  border-left: 4px solid var(--accent);
+  padding: 0 0 0 20px;
+  margin: 0px;
+  font-size: 1.333em;
+}
+
+ul,
+ol {
+  @apply pl-4 flex flex-col gap-2;
+}
+
+ul li::marker {
+  @apply text-(--foreground-muted);
+}
+
+ul {
+  @apply list-disc;
+}
+
+ol {
+  @apply list-decimal;
+}
+
+ul ul,
+ul ol,
+ol ol,
+ol ul {
+  @apply !gap-0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @apply capitalize font-bold;
+}
+
+h1 {
+  @apply text-4xl my-4;
+}
+
+h2 {
+  @apply text-3xl;
+}
+
+h3 {
+  @apply text-2xl;
+}
+
+h4 {
+  @apply text-xl;
+}
+
+h5 {
+  @apply text-lg;
+}
+
+@media (max-width: 720px) {
+  p {
+    line-height: 1.4;
+  }
+
+  pre {
+    padding: 1em;
+    font-size: 0.8em;
+  }
+
+  code {
+    font-size: 0.8em;
+  }
+
+  body {
+    font-size: 16px;
+  }
+
+  h1 {
+    @apply text-3xl my-4;
+  }
+
+  h2 {
+    @apply text-2xl;
+  }
+
+  h3 {
+    @apply text-xl;
+  }
+
+  h4 {
+    @apply text-lg;
+  }
+
+  h5 {
+    @apply text-base;
+  }
+}
