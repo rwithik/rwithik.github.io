@@ -126,3 +126,13 @@ h5 {
     @apply text-base;
   }
 }
+
+/* Table of contents stuff */
+
+h2#table-of-contents + ul {
+  @apply !gap-1 !no-underline !text-(--foreground);
+}
+
+h2#table-of-contents + ul li {
+  @apply !no-underline !text-(--foreground);
+}
