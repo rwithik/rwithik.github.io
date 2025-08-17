@@ -4,8 +4,6 @@ description: "Tic-Tac-Toe game with only the typescript type system that compile
 pubDate: "Aug 15, 2025"
 ---
 
-import Tooltip from "../../components/Tooltip.astro";
-
 The TypeScript type system is honestly pretty straightforward on the surface, but it's also Turing Complete. I mean the type system itself, not TypeScript as a whole. That means the TS type system can do anything a proper "programming language" can do. I say "programming language" in quotes, because today, we're programming with the type system!
 
 {/* ## Table of contents */}
@@ -401,13 +399,29 @@ type GetWinner<B extends Board> = CheckAnyRowWin<B> extends never
     : CheckAnyColWin<B>
   : CheckAnyRowWin<B>;
 
-type Winner = GetWinner<[["X", "O", " "], ["X", "X", " "], ["O", "O", "X"]]>;
+type Winner = GetWinner<[
+  ["X", "O", " "], 
+  ["X", "X", " "], 
+  ["O", "O", "X"]
+]>;
 
-type Winner2 = GetWinner<[["X", "O", "O"], ["X", "O", " "], ["X", "O", "X"]]>;
+type Winner2 = GetWinner<[
+  ["X", "O", "O"], 
+  ["X", "O", " "], 
+  ["X", "O", "X"]
+]>;
 
-type Winner3 = GetWinner<[["X", "X", "X"], ["O", "O", " "], ["O", "O", "X"]]>;
+type Winner3 = GetWinner<[
+  ["X", "X", "X"], 
+  ["O", "O", " "], 
+  ["O", "O", "X"]
+]>;
 
-type Winner4 = GetWinner<[["X", " ", "X"], ["O", " ", " "], ["O", "O", "X"]]>;
+type Winner4 = GetWinner<[
+  ["X", " ", "X"], 
+  ["O", " ", " "], 
+  ["O", "O", "X"]
+]>;
 ```
 
 ## What's next?
