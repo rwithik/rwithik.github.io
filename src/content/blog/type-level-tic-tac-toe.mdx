@@ -55,7 +55,7 @@ type Arr = string[];
 type Result = Arr[number]; // Result is string
 ```
 
-### The `extends` keyword
+### The <span class="lowercase">`extends`</span> keyword
 
 The `extends` keyword can be used in two different ways.
 
@@ -399,29 +399,13 @@ type GetWinner<B extends Board> = CheckAnyRowWin<B> extends never
     : CheckAnyColWin<B>
   : CheckAnyRowWin<B>;
 
-type Winner = GetWinner<[
-  ["X", "O", " "], 
-  ["X", "X", " "], 
-  ["O", "O", "X"]
-]>;
+type Winner = GetWinner<[["X", "O", " "], ["X", "X", " "], ["O", "O", "X"]]>;
 
-type Winner2 = GetWinner<[
-  ["X", "O", "O"], 
-  ["X", "O", " "], 
-  ["X", "O", "X"]
-]>;
+type Winner2 = GetWinner<[["X", "O", "O"], ["X", "O", " "], ["X", "O", "X"]]>;
 
-type Winner3 = GetWinner<[
-  ["X", "X", "X"], 
-  ["O", "O", " "], 
-  ["O", "O", "X"]
-]>;
+type Winner3 = GetWinner<[["X", "X", "X"], ["O", "O", " "], ["O", "O", "X"]]>;
 
-type Winner4 = GetWinner<[
-  ["X", " ", "X"], 
-  ["O", " ", " "], 
-  ["O", "O", "X"]
-]>;
+type Winner4 = GetWinner<[["X", " ", "X"], ["O", " ", " "], ["O", "O", "X"]]>;
 ```
 
 ## What's next?
