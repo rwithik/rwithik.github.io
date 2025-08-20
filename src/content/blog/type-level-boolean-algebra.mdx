@@ -1,0 +1,220 @@
+---
+title: "Type Level Boolean Algebra"
+description: "Boolean algebra operators with only the typescript type system that compiles to nothing."
+pubDate: "Aug 19, 2025"
+---
+
+## Intro
+
+In this article, we'll implement boolean operators. Using only the TypeScript type system. If you want a refresher on some basics, generics, and why we're doing this, check out [this article](/blog/type-level-tic-tac-toe/).
+
+## Refresher on boolean algebra
+
+First, the basics:
+
+- `AND` returns `true` if both the left and right side are `true` and `false` otherwise.
+- `OR` returns `false` if both the left and right side are `false` and `true` otherwise.
+- `NOT` flips the input; i.e., it returns `true` if the input is `false`, and `false` if it is `true`.
+
+Now some operators that build on these three basic ones:
+
+- `NAND` is equivalent to `NOT(x AND y)`, i.e., it flips the output of `AND`
+- `NOR`, you guessed it, flips the output of `OR`
+
+And a tricky one to end the refresher:
+
+- `XOR` returns `true` if both the inputs are different from each other and return `false` if they are same
+- `XNOR` just flips the output of `XOR`
+
+Here are the truth tables for all of them for the sake of brevity:
+
+| x     | y     | x AND y | x OR y | NOT x | x NAND y | x NOR y | x XOR y | x XNOR y |
+| ----- | ----- | ------- | ------ | ----- | -------- | ------- | ------- | -------- |
+| false | false | false   | false  | true  | true     | true    | false   | true     |
+| false | true  | false   | true   | true  | true     | false   | true    | false    |
+| true  | false | false   | true   | false | true     | false   | true    | false    |
+| true  | true  | true    | true   | false | false    | false   | false   | true     |
+
+## The basics
+
+```ts
+type And<A extends boolean, B extends boolean> = A extends true
+  ? B extends true
+    ? true
+    : false
+  : false;
+
+type Or<A extends boolean, B extends boolean> = A extends true
+  ? true
+  : B extends true
+    ? true
+    : false;
+
+type Not<A extends boolean> = A extends true ? false : true;
+```
+
+Let's test these out, here's the [playground link](https://www.typescriptlang.org/play/?#code/C4TwDgpgBAggdgEwDwyhAHsCiDOUBGA9oQDYQCGcANFAEJqbYJ5GkVwB8UAvLA1rijAATgFcIAKCjSoAfjr8meEeKkz5KyTKgAuKADNyJHFpl7DxiAG4JE0JCgB5YSkWDWZSjXoYBzAsSenDx8vkpCYqbSGpFq0no+jIKacXIRqtrmRiY2duDQAHKEwK5h7oHsXLyoZf6aaRYmuunWtvbQACoQOMAAjCHwyJo0jRAcNgD0E9oAerJ5Dl09AEwDiEjDLeMSU7Pz7VBLwADMIc5IozSa27sycwud3cAALGculwbZY5PTd-v5hyeAFY3htIldIjdftJ7gcjgA2EJFEqjKF7B6AnoAdiRxTB4jRfwkQA) if you want to mess around:
+
+```ts
+type Test1 = And<true, false>;
+//    ^? type Test1 = false
+type Test2 = And<true, true>;
+//    ^? type Test2 = true
+type Test3 = Or<false, true>;
+//    ^? type Test3 = true
+type Test4 = Or<false, false>;
+//    ^? type Test4 = false
+type Test5 = Or<true, true>;
+//    ^? type Test5 = true
+type Test6 = Not<false>;
+//    ^? type Test6 = true
+type Test7 = Not<true>;
+//    ^? type Test7 = false
+```
+
+> **Tip**: In the playground, use `^?` to see what the type above it evaluates to.
+
+## The derived operators
+
+Before we get started on the types, we'll derive them first with the basic operators.
+
+```
+x NAND y = NOT(x AND y);
+x NOR y = NOT(x OR y);
+```
+
+We'll write the types for these two first before we do XOR.
+
+```ts
+type Nand<A extends boolean, B extends boolean> = Not<And<A, B>>;
+type Nor<A extends boolean, B extends boolean> = Not<Or<A, B>>;
+```
+
+Note that we can implement them without using `NOT`, `AND` and `OR`, like this:
+
+```ts
+type Nand<A extends boolean, B extends boolean> = A extends false
+  ? true
+  : B extends false
+    ? true
+    : false;
+
+type Nor<A extends boolean, B extends boolean> = A extends true
+  ? false
+  : B extends true
+    ? false
+    : true;
+```
+
+Aaaand testing them out([playground link](https://www.typescriptlang.org/play/?#code/C4TwDgpgBAggdgEwDwyhAHsCiDOUBGA9oQDYQCGcANFAEJqbYJ5GkVwB8UAvLA1rijAATgFcIAKCjSoAfjr8meEeKkz5KyTKgAuKADNyJHFpl7DxiAG4JE0JCgB5YSkWDWZSjXoYBzAsSenDx8vkpCYqbSGpFq0no+jIKacXIRqtrmRiY2duDQAHKEwK5h7oHsXLyoZf6aaRYmuunWtvaFlMg1Sf4e7N5uvRWUVVBFJfBd3hwcNu1jhC7dfizD1Aq1q2wjIeNIzijTs235UAAqEDjAAIy7nUiaNJrH8xdXAEx3iA+RNI0QL1Ob2AAGYvsh-k9IoCHMCACzgpCQgzZAFzIGXYAAVl2ix+4ih4hh0GBADZcS5HijLMTzpiAOwUpGowlovKwzEADiZyP+xyAA)):
+
+```ts
+type Test1 = Nand<true, true>;
+//    ^? type Test1 = false
+type Test2 = Nand<true, false>;
+//    ^? type Test2 = true
+type Test3 = Nand<false, true>;
+//    ^? type Test3 = true
+type Test4 = Nand<false, false>;
+//    ^? type Test4 = true
+type Test5 = Nor<true, true>;
+//    ^? type Test5 = false
+type Test6 = Nor<true, false>;
+//    ^? type Test6 = false
+type Test7 = Nor<false, true>;
+//    ^? type Test7 = false
+type Test8 = Nor<false, false>;
+//    ^? type Test8 = true
+```
+
+XOR is a bit more complicated:
+
+```
+x XOR y = (x OR y) AND NOT(x AND y)
+```
+
+Let's break it down. The first part, `x OR y`, checks if at least one of `x` or `y` is true. The second part, `NOT(x AND y)`, checks if both `x` and `y` are not true. If you check the truth table for `XOR` below(same as the one above), you'll notice that `XOR` is true when exactly one of the inputs is true.
+
+| x     | y     | x XOR y |
+| ----- | ----- | ------- |
+| false | false | false   |
+| false | true  | true    |
+| true  | false | true    |
+| true  | true  | false   |
+
+And, we'll make the truth table for the expression, just to verify that both of them evaluate to the same thing:
+
+| x     | y     | x OR y | NOT(x AND y) | (x OR y) AND NOT(x AND y) |
+| ----- | ----- | ------ | ------------ | ------------------------- |
+| false | false | false  | true         | false                     |
+| false | true  | true   | true         | true                      |
+| true  | false | true   | true         | true                      |
+| true  | true  | true   | false        | false                     |
+
+Now, let's write the types and test it out([playground link](https://www.typescriptlang.org/play/?#code/C4TwDgpgBAggdgEwDwyhAHsCiDOUBGA9oQDYQCGcANFAEJqbYJ5GkVwB8UAvLA1rijAATgFcIAKCjSoAfjr8meEeKkz5KyTKgAuKADNyJHFpl7DxiAG4JE0JCgB5YSkWDWZSjXoYBzAsSenDx8vkpCYqbSGpFq0no+jIKacXIRqtrmRiY2duDQAHKEwK5h7oHsXLyoZf6aaRYmuunWtvaFlMg1Sf4e7N5uvRWUVVBFJfBd3hwcNu1jhC7dfizD1Aq1q2wjIeNIzijTs235UAAai6U9W0EDmwHbwdWI+0vTNAWdh3Qzc6dncEuy3CfS8G2uDyCoz2FzeP2OeQcABUIDhgABGEKwpCaGiaY4AegJ2gAerJEdAUWiAExYy64gzZCCE4kyMkUqBU4AAZjpLkaEDxkRZpPJ8y5ABY+UgBTQBSK2bIgA)).
+
+```ts
+type Xor<A extends boolean, B extends boolean> = And<Or<A, B>, Nand<A, B>>;
+type Xnor<A extends boolean, B extends boolean> = Not<Xor<A, B>>;
+```
+
+## The universal gates
+
+Both `NAND` and `NOR` are universal gates that we can use to implement all the other gates. We'll be doing that with types as well, just to show that we can build more complicated types from a single primitive.
+
+We'll start with the `NAND` gate,
+
+1. If both the inputs to the `NAND` gate are the same, it flips that input; i.e., a `NOT` gate
+2. The `AND` gate is just a `NAND` gate output connected to a `NOT` gate
+3. And we can implement the `OR` gate with `NOT` and `AND` gates:
+   From [De_Morgan's_laws](https://en.wikipedia.org/wiki/De_Morgan%27s_laws), we know that-
+
+```
+NOT(a OR b) = NOT(a) AND NOT(b)
+```
+
+Wrapping both sides with a `NOT` gate:
+
+```
+NOT(NOT(a OR b)) = NOT(NOT(a) AND NOT(b))
+```
+
+And we know that a double `NOT` gate results in the original value, so:
+
+```
+a OR b = NOT(NOT(a) AND NOT(b))
+```
+
+There we have it, an OR gate expressed in terms of AND and NOT gates.
+
+The code(and [playground](https://www.typescriptlang.org/play/?#code/C4TwDgpgBAcghgOwCYB4CCUIA9gWQZygCMB7EgGwkQBooAhTHPJQ0iqhAPigF4oNsuAlABmccvggAoKLKgB+KMABOAV2lyoALnqMhLUeMky5ilepOydYiRADcUqaEiwSwdHuasylRNz7wyOi0aJxO4NBoQQJMwmy+CLQMgl7EPhz+ru6BqGhJnGHO0ADyyh4pcek0uhUG8Rm8WehBMG7onLSt7nQFYeEuACoQ+MAAjI2lKOYQtNNhAPTzmgB68lJAA))
+
+```ts
+type Nand<A extends boolean, B extends boolean> = A extends false
+  ? true
+  : B extends false
+    ? true
+    : false;
+
+type Not<A extends boolean> = Nand<A, A>;
+type And<A extends boolean, B extends boolean> = Not<Nand<A, B>>;
+type Or<A extends boolean, B extends boolean> = Not<And<Not<A>, Not<B>>>;
+```
+
+The same with the `NOR` gate. I'm not going through the derivation again, since it's really similar to the `NAND` one, but here's the code and [playground](https://www.typescriptlang.org/play/?#code/C4TwDgpgBAcg9gJwDwEEoQB7AgOwCYDOUARnHADYQCGOANFAELpa6ElmU0B8UAvFGkzZ8RYAgCuEAFBQoAfigAzKuQLTZALkbNhbMZJmz5SlWsOao+iAG4pU0JFhxgqHayKkK1HD37xkKPQoXPbg0ADyAW4i7F409ExC7rGcPnxOLv6oCVwhDtAo+K5JMZ6pCdFsZd6+GUiRSPAuwfRNSAy5IaGOACoQBMAAjOmFeEhW9FYhAPTTRlAAenJSQA):
+
+```ts
+type Nor<A extends boolean, B extends boolean> = A extends true
+  ? false
+  : B extends true
+    ? false
+    : true;
+
+type Not<A extends boolean> = Nor<A, A>;
+type Or<A extends boolean, B extends boolean> = Not<Nor<A, B>>;
+type And<A extends boolean, B extends boolean> = Not<Or<Not<A>, Not<B>>>;
+```
+
+## What's Next?
+
+Implementing boolean algebra in the type system is not that complicated, but it goes to show that it's possible to do things with the type system, that you might not think a type system should be able to do. If you want to check out something a bit more complicated, check [this article](/blog/type-level-tic-tac-toe/) where I made a Tic-Tac-Toe game with the type system.
