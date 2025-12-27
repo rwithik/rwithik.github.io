@@ -6,30 +6,28 @@ pubDate: "Aug 15, 2025"
 
 The TypeScript type system is honestly pretty straightforward on the surface, but it's also Turing Complete. I mean the type system itself, not TypeScript as a whole. That means the TS type system can do anything a proper "programming language" can do. I say "programming language" in quotes, because today, we're programming with the type system!
 
-{/* ## Table of contents */}
-
 Like the title says, we're making a Tic-Tac-Toe game with just the type system. The result will be a game that runs entirely on the type system and produces zero runtime code[^runtime].
 
 [^runtime]: You might have a "use strict" in the compiled code depending on your tsconfig.
 
-## Why do this?
+## Why Do This?
 
 Fair question! Beyond just being a fun brain exercise, messing around with type-level programming teaches you how the type system works under the hood and maybe pickup some patterns you can use in real-world apps.
 
 Plus, if you can build Tic-Tac-Toe in types, you can probably figure out how to validate your API responses or build some wild form validation logic.
 
-## Core concepts
+## Core Concepts
 
 Let's establish a few basics that we'll be using:
 
-### Supertypes and subtypes
+### Supertypes and Subtypes
 
 The TypeScript type system has subsets and supersets within types. For example:
 
 - the type `1` is a subset of the type `number`, so is `1 | 2 | 3`
 - similarly, the `boolean` type is a superset with two subtypes `true` and `false`
 
-### Generics as functions
+### Generics as Functions
 
 We will be using generic types like functions in a traditional programming language. They accept inputs and return outputs, much like functions, but on a type level. We'll be using these _a lot_.
 
@@ -38,7 +36,7 @@ type Identity<T> = T;
 type Result = Identity<string>; // Result is string;
 ```
 
-### Tuples and indexed access
+### Tuples and Indexed Access
 
 Tuples are fixed size arrays, and we can access elements in a tuple/array with the bracket notation, like we do in JS.
 
@@ -55,7 +53,7 @@ type Arr = string[];
 type Result = Arr[number]; // Result is string
 ```
 
-### The <span class="lowercase">`extends`</span> keyword
+### The `extends` Keyword
 
 The `extends` keyword can be used in two different ways.
 
@@ -103,7 +101,7 @@ And a board is a tuple of three rows
 type Board = [Row, Row, Row];
 ```
 
-### Detecting a win
+### Detecting a Win
 
 Now we're getting to the good part, the logic for checking who won the board. A player wins when they satisfy one of the following conditions:
 
@@ -113,7 +111,7 @@ Now we're getting to the good part, the logic for checking who won the board. A 
 
 Let's start with the easiest one, checking along a row.
 
-#### Checking the rows
+#### Checking the Rows
 
 ```typescript
 type CheckRowWinForPlayer<R extends Row, P extends Player> = R[0] extends P
@@ -132,11 +130,12 @@ In the above snippet, we define a generic type, `CheckRowWinForPlayer`, that tak
 We'll just write one more generic to figure out which player won for a row. It's just a wrapper on the previous generic.
 
 ```typescript
-type CheckRowWin<R extends Row> = CheckRowWinForPlayer<R, PlayerX> extends true
-  ? PlayerX
-  : CheckRowWinForPlayer<R, PlayerO> extends true
-  ? PlayerO
-  : never;
+type CheckRowWin<R extends Row> =
+  CheckRowWinForPlayer<R, PlayerX> extends true
+    ? PlayerX
+    : CheckRowWinForPlayer<R, PlayerO> extends true
+      ? PlayerO
+      : never;
 ```
 
 This should be a bit easier to follow- we call `CheckRowWinForPlayer` on the row, for each player and if they evaluate to true, return that player.
@@ -169,7 +168,7 @@ type Columns = 0 | 1 | 2;
 type CheckColWinForPlayer<
   B extends Board,
   Col extends Columns,
-  P extends Player
+  P extends Player,
 > = B[0][Col] extends P
   ? B[1][Col] extends P
     ? B[2][Col] extends P
@@ -189,12 +188,12 @@ Pretty similar to the logic for the rows, we just have another parameter for the
 
 Next up, the diagonals
 
-#### Checking the diagonals
+#### Checking the Diagonals
 
 ```typescript
 type CheckLeadingDiagonalWinForPlayer<
   B extends Board,
-  P extends Player
+  P extends Player,
 > = B[0][0] extends P
   ? B[1][1] extends P
     ? B[2][2] extends P
@@ -205,7 +204,7 @@ type CheckLeadingDiagonalWinForPlayer<
 
 type CheckAntiDiagonalWinForPlayer<
   B extends Board,
-  P extends Player
+  P extends Player,
 > = B[0][2] extends P
   ? B[1][1] extends P
     ? B[2][0] extends P
@@ -225,7 +224,7 @@ Again, pretty straightforward, we just have a check for each diagonal.
 
 Next up, we'll add some more generics to check if anyone has won on _any_ row, column, or diagonal.
 
-#### Combining the checks and getting the winner
+#### Combining the Checks and Getting the Winner
 
 ```typescript
 type CheckAnyDiagonalWin<B extends Board> = If<
@@ -234,74 +233,61 @@ type CheckAnyDiagonalWin<B extends Board> = If<
   If<CheckDiagonalWinForPlayer<B, PlayerO>, PlayerO, never>
 >;
 
-type CheckAnyRowWin<B extends Board> = CheckRowWin<B[0]> extends never
-  ? CheckRowWin<B[1]> extends never
-    ? CheckRowWin<B[2]> extends never
-      ? never
-      : CheckRowWin<B[2]>
-    : CheckRowWin<B[1]>
-  : CheckRowWin<B[0]>;
+type CheckAnyRowWin<B extends Board> =
+  CheckRowWin<B[0]> extends never
+    ? CheckRowWin<B[1]> extends never
+      ? CheckRowWin<B[2]> extends never
+        ? never
+        : CheckRowWin<B[2]>
+      : CheckRowWin<B[1]>
+    : CheckRowWin<B[0]>;
 
-type CheckAnyColWin<B extends Board> = CheckColWin<B, 0> extends never
-  ? CheckColWin<B, 1> extends never
-    ? CheckColWin<B, 2> extends never
-      ? never
-      : CheckColWin<B, 2>
-    : CheckColWin<B, 1>
-  : CheckColWin<B, 0>;
+type CheckAnyColWin<B extends Board> =
+  CheckColWin<B, 0> extends never
+    ? CheckColWin<B, 1> extends never
+      ? CheckColWin<B, 2> extends never
+        ? never
+        : CheckColWin<B, 2>
+      : CheckColWin<B, 1>
+    : CheckColWin<B, 0>;
 ```
 
 And finally, a `GetWinner` generic to get the winner, if there is one, for a board.
 
 ```typescript
-type GetWinner<B extends Board> = CheckAnyRowWin<B> extends never
-  ? CheckAnyColWin<B> extends never
-    ? CheckAnyDiagonalWin<B> extends never
-      ? never
-      : CheckAnyDiagonalWin<B>
-    : CheckAnyColWin<B>
-  : CheckAnyRowWin<B>;
+type GetWinner<B extends Board> =
+  CheckAnyRowWin<B> extends never
+    ? CheckAnyColWin<B> extends never
+      ? CheckAnyDiagonalWin<B> extends never
+        ? never
+        : CheckAnyDiagonalWin<B>
+      : CheckAnyColWin<B>
+    : CheckAnyRowWin<B>;
 ```
 
 And that's it! You have a functioning Tic-Tac-Toe game using just the TypeScript type system and it compiles to nothing.
 
-### Testing the game
+### Testing the Game
 
 ```typescript
 type Winner1 = GetWinner<
   // ^? type Winner1 = "X"
-  [
-    ["X", "O", " "], 
-    ["X", "X", " "], 
-    ["O", "O", "X"]
-  ]
+  [["X", "O", " "], ["X", "X", " "], ["O", "O", "X"]]
 >;
 
 type Winner2 = GetWinner<
   // ^? type Winner1 = "X"
-  [
-    ["X", "O", "O"], 
-    ["X", "O", " "], 
-    ["X", "O", "X"]
-  ]
+  [["X", "O", "O"], ["X", "O", " "], ["X", "O", "X"]]
 >;
 
 type Winner3 = GetWinner<
   // ^? type Winner1 = "X"
-  [
-    ["X", "X", "X"], 
-    ["O", "O", " "], 
-    ["O", "O", "X"]
-  ]
+  [["X", "X", "X"], ["O", "O", " "], ["O", "O", "X"]]
 >;
 
 type Winner4 = GetWinner<
   // ^? type Winner1 = never
-  [
-    ["X", " ", "X"], 
-    ["O", " ", " "], 
-    ["O", "O", "X"]
-  ]
+  [["X", " ", "X"], ["O", " ", " "], ["O", "O", "X"]]
 >;
 ```
 
@@ -342,7 +328,7 @@ type CheckRowWin<R extends Row> = If<
 type CheckColWinForPlayer<
   B extends Board,
   Col extends Columns,
-  P extends Player
+  P extends Player,
 > = B[0][Col] extends P
   ? B[1][Col] extends P
     ? B[2][Col] extends P
@@ -359,7 +345,7 @@ type CheckColWin<B extends Board, Col extends Columns> = If<
 
 type CheckLeadingDiagonalWinForPlayer<
   B extends Board,
-  P extends Player
+  P extends Player,
 > = B[0][0] extends P
   ? B[1][1] extends P
     ? B[2][2] extends P
@@ -370,7 +356,7 @@ type CheckLeadingDiagonalWinForPlayer<
 
 type CheckAntiDiagonalWinForPlayer<
   B extends Board,
-  P extends Player
+  P extends Player,
 > = B[0][2] extends P
   ? B[1][1] extends P
     ? B[2][0] extends P
@@ -391,56 +377,43 @@ type CheckAnyDiagonalWin<B extends Board> = If<
   If<CheckDiagonalWinForPlayer<B, PlayerO>, PlayerO, never>
 >;
 
-type CheckAnyRowWin<B extends Board> = CheckRowWin<B[0]> extends never
-  ? CheckRowWin<B[1]> extends never
-    ? CheckRowWin<B[2]> extends never
-      ? never
-      : CheckRowWin<B[2]>
-    : CheckRowWin<B[1]>
-  : CheckRowWin<B[0]>;
+type CheckAnyRowWin<B extends Board> =
+  CheckRowWin<B[0]> extends never
+    ? CheckRowWin<B[1]> extends never
+      ? CheckRowWin<B[2]> extends never
+        ? never
+        : CheckRowWin<B[2]>
+      : CheckRowWin<B[1]>
+    : CheckRowWin<B[0]>;
 
-type CheckAnyColWin<B extends Board> = CheckColWin<B, 0> extends never
-  ? CheckColWin<B, 1> extends never
-    ? CheckColWin<B, 2> extends never
-      ? never
-      : CheckColWin<B, 2>
-    : CheckColWin<B, 1>
-  : CheckColWin<B, 0>;
+type CheckAnyColWin<B extends Board> =
+  CheckColWin<B, 0> extends never
+    ? CheckColWin<B, 1> extends never
+      ? CheckColWin<B, 2> extends never
+        ? never
+        : CheckColWin<B, 2>
+      : CheckColWin<B, 1>
+    : CheckColWin<B, 0>;
 
-type GetWinner<B extends Board> = CheckAnyRowWin<B> extends never
-  ? CheckAnyColWin<B> extends never
-    ? CheckAnyDiagonalWin<B> extends never
-      ? never
-      : CheckAnyDiagonalWin<B>
-    : CheckAnyColWin<B>
-  : CheckAnyRowWin<B>;
+type GetWinner<B extends Board> =
+  CheckAnyRowWin<B> extends never
+    ? CheckAnyColWin<B> extends never
+      ? CheckAnyDiagonalWin<B> extends never
+        ? never
+        : CheckAnyDiagonalWin<B>
+      : CheckAnyColWin<B>
+    : CheckAnyRowWin<B>;
 
-type Winner = GetWinner<[
-  ["X", "O", " "], 
-  ["X", "X", " "], 
-  ["O", "O", "X"]
-]>;
+type Winner = GetWinner<[["X", "O", " "], ["X", "X", " "], ["O", "O", "X"]]>;
 
-type Winner2 = GetWinner<[
-  ["X", "O", "O"], 
-  ["X", "O", " "], 
-  ["X", "O", "X"]
-]>;
+type Winner2 = GetWinner<[["X", "O", "O"], ["X", "O", " "], ["X", "O", "X"]]>;
 
-type Winner3 = GetWinner<[
-  ["X", "X", "X"], 
-  ["O", "O", " "], 
-  ["O", "O", "X"]
-]>;
+type Winner3 = GetWinner<[["X", "X", "X"], ["O", "O", " "], ["O", "O", "X"]]>;
 
-type Winner4 = GetWinner<[
-  ["X", " ", "X"], 
-  ["O", " ", " "], 
-  ["O", "O", "X"]
-]>;
+type Winner4 = GetWinner<[["X", " ", "X"], ["O", " ", " "], ["O", "O", "X"]]>;
 ```
 
-## What's next?
+## What's Next?
 
 This is just a simple implementation. You can try adding stuff like:
 

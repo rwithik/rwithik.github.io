@@ -8,7 +8,7 @@ pubDate: "Aug 19, 2025"
 
 In this article, we'll implement boolean operators. Using only the TypeScript type system. If you want a refresher on some basics, generics, and why we're doing this, check out [this article](/blog/type-level-tic-tac-toe/).
 
-## Refresher on boolean algebra
+## Refresher on Boolean Algebra
 
 First, the basics:
 
@@ -35,7 +35,7 @@ Here are the truth tables for all of them for the sake of brevity:
 | true  | false | false   | true   | false | true     | false   | true    | false    |
 | true  | true  | true    | true   | false | false    | false   | false   | true     |
 
-## The basics
+## The Basics
 
 ```ts
 type And<A extends boolean, B extends boolean> = A extends true
@@ -74,7 +74,7 @@ type Test7 = Not<true>;
 
 > **Tip**: In the playground, use `^?` to see what the type above it evaluates to.
 
-## The derived operators
+## The Derived Operators
 
 Before we get started on the types, we'll derive them first with the basic operators.
 
@@ -158,7 +158,7 @@ type Xor<A extends boolean, B extends boolean> = And<Or<A, B>, Nand<A, B>>;
 type Xnor<A extends boolean, B extends boolean> = Not<Xor<A, B>>;
 ```
 
-## The universal gates
+## The Universal Gates
 
 Both `NAND` and `NOR` are universal gates that we can use to implement all the other gates. We'll be doing that with types as well, just to show that we can build more complicated types from a single primitive.
 
