@@ -43,7 +43,7 @@ b79e266 (HEAD -> main, new-feature) HEAD@{4}: commit: my new feature
 
 Seems daunting at first, but it's pretty simple. The first part(`b79e266` in the first line) is the shortened commit hash.
 
-- The commit hash is usually 41 characters long, but if you can uniquely identify it with at least 4 characters, you can use that, so git shortens the hash a lot of the time. For my new repo, it's 7 characters long, but if a commit can't be uniquely identified with 7 characters, it'll automatically show more characters when showing shortened hashes. So you'll never run into an issue where the shortened hash won't uniquely identify a commit.
+- The commit hash is usually 40 characters long (a SHA-1 hash rendered in hexadecimal), but if you can uniquely identify it with at least 4 characters, you can use that, so git shortens the hash a lot of the time. For my new repo, it's 7 characters long, but if a commit can't be uniquely identified with 7 characters, it'll automatically show more characters when showing shortened hashes. So you'll never run into an issue where the shortened hash won't uniquely identify a commit.
 
 The second part(`(HEAD -> main, new-feature)`) just describes how `HEAD` changed, usually only present when you switched branches.
 
@@ -217,6 +217,6 @@ Some ideas for you to explore next:
 - Try combining the commands from this post: `git log -S` + `git bisect` is a great combo for debugging.
 - Play around with some other commands like `cherry-pick`, `range-diff`, and `blame -C`.
 
-And honestly, the best way to learn this stuff is still to just break things in a small repo and then fix them. Committed changes are very, very hard to lose when using git, atleast as long as you know `git reflog`.
+And honestly, the best way to learn this stuff is still to just break things in a small repo and then fix them. Committed changes are very, very hard to lose when using git, at least as long as you know `git reflog`.
 
-So yeah, git can look intimidating from the outside, but once you understand a few of these "hidden" commands, it starts to feel a lot less magical and a lot more predictable. And that's really the goal here
+So yeah, git can look intimidating from the outside, but once you understand a few of these "hidden" commands, it starts to feel a lot less magical and a lot more predictable. And that's really the goal here.
