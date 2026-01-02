@@ -1,0 +1,221 @@
+---
+title: "Intermediate git"
+description: "Some underused and underrated git commands and some details on how git works."
+pubDate: "Jan 03, 2026"
+---
+
+{/* Note: There is a lot of content from a tech session I took at a previous company. */}
+
+This article will help you get familiar with some underused and underrated git commands and some details on how git works. This article assumes that you are somewhat familiar with the basics of git. You should already be comfortable with commit/branch/staging basics.
+
+## Pointers?
+
+Yeah, we have pointers in git too, but here they point to a commit (or at least something that can be used in place of a commit) instead of a memory address like in programming.
+
+There are a few you should know about. HEAD points to a branch ref, which points to a commit. And in detached HEAD (we'll get to that in the next section), it points directly to a commit. So, if you have just created a new repo, it points to the `main` branch. If you checkout a new branch, it points to that one.
+
+Branches are also basically just a pointer to a commit, more specifically, the latest commit on that branch. In fact, since git handles a lot of things with just basic files, you can see which commits all your branches point to by just opening the corresponding file in `.git/refs/heads`.
+
+### Detached HEAD
+
+If you've worked with git for a while, you've probably seen this warning:
+
+```bash
+You are in 'detached HEAD' state
+```
+
+This happens when you checkout a commit with `git checkout <commit-hash>`. Usually, when you work on a branch, the HEAD points to the branch, i.e., the latest commit on the branch. But when you checkout a commit, you are not on a branch, you are just on a commit, i.e., the HEAD directly points to the commit. This is usually not a problem, but if you try to commit and push to a remote, you'll get an error. You will be in a detached HEAD state when you check out an old commit, or when using commands like git bisect.
+
+## `git reflog`
+
+If you ever thought that you lost a commit after playing around a bit too much with `git reset`, this one is for you. `git reflog` will give you the reflogs, or reference logs, a history of how the HEAD has changed in your local repo. If you run `git reflog`, you'll see something like this:
+
+```bash
+b79e266 (HEAD -> main, new-feature) HEAD@{0}: reset: moving to b79e2660c0eb09fb2cc33bd1b32282ba50ff05ec
+543fc8c HEAD@{1}: commit: bug fix
+b79e266 (HEAD -> main, new-feature) HEAD@{2}: merge new-feature: Fast-forward
+91dc8a6 HEAD@{3}: checkout: moving from new-feature to main
+b79e266 (HEAD -> main, new-feature) HEAD@{4}: commit: my new feature
+91dc8a6 HEAD@{5}: checkout: moving from main to new-feature
+91dc8a6 HEAD@{6}: commit (initial): Initial commit
+```
+
+Seems daunting at first, but it's pretty simple. The first part (`b79e266` in the first line) is the shortened commit hash.
+
+- The commit hash is usually 40 characters long (a SHA-1 hash rendered in hexadecimal), but if you can uniquely identify it with at least 4 characters, you can use that, so git shortens the hash a lot of the time. For my new repo, it's 7 characters long, but if a commit can't be uniquely identified with 7 characters, it'll automatically show more characters when showing shortened hashes. So you'll never run into an issue where the shortened hash won't uniquely identify a commit.
+
+The second part (`(HEAD -> main, new-feature)`) just describes how `HEAD` changed, usually only present when you switched branches.
+
+The last part is a description, pretty straightforward.
+
+You probably noticed that I skipped the third part `HEAD@{0}`. This syntax can be used to refer to a commit, `HEAD@{0}` means `HEAD`, `HEAD@{1}` means the commit where HEAD was one movement ago, etc. You don't have to use HEAD, you can use anything that can be interpreted as a commit, a branch name, or a commit hash. So `main@{4}` means where main was 4 movements ago, usually that means 4 commits ago. But, you don't have to use a number either, you can do `main@{one.week.ago}` to see where main was a week ago in your local repo.
+
+> Note: reflogs are local-only, the remote server neither cares about, nor stores your reflogs. This means that if you delete your repo and clone it again, you lose the reflogs even if your committed changes are not lost.
+
+> Another note: The garbage collector does eventually clean up unreachable commits, so the reflogs won't be usable forever. By default, it is 30 days. That should be more than enough time for you to figure things out if something went wrong.
+
+## `git worktree`
+
+Remember that time you were working on a feature and your manager comes and comes and tells you about a bug that has to be fixed today. You stash your changes, or make a temporary commit that you'll revert later, and make a new branch to work on the fix. `git worktree` will make that a bit easier. It gives you a different copy of your repo that you can work on independently. You create a worktree like so:
+
+```bash
+git worktree add ../myrepo-fixes fix/urgent-bug-fix
+```
+
+This creates a new worktree, which is essentially a copy of your repo, you can work on it how you would work on any repo. Any branches or commits you make in any worktree will be visible in all worktrees.
+
+You might be thinking, “How is this any different from just copying the whole directory?” A worktree is not a full repo copy. When you create a worktree, git will share the object database (the `.git/objects` directory), meaning you are not duplicating info about your commits. This gives you some QoL features like not having to fetch from the same remote multiple times, not being able to check out the same branch in multiple places and accidentally introducing conflicts later. Copying the directory will copy over everything, including the `.git` file, so worktrees are just more convenient and efficient.
+
+{/* , meaning you'll just need to pull from your remote once to update all worktrees. git will also prevent you from checking out the same branch in multiple worktrees, so that you'll not run into conflicts later. Copying the directory will duplicate the whole .git directory, so worktree is just a bit more efficient. */}
+
+## `git log`
+
+git log is one of those basic commands you probably already know about, but it can do a lot more than you think.
+
+`--oneline` will give you one commit per line instead of the usual details you get when you run `git log`
+
+```bash
+$ git log --oneline
+e85ae279b0 (HEAD -> master, origin/master, origin/HEAD) The seventh batch
+bbefa15ff5 Merge branch 'en/replay-doc-revision-range'
+7fc0b33b5d Merge branch 'yc/xdiff-patience-optim'
+fe0e6ffa19 Merge branch 'bc/zsh-testsuite'
+c64b234a0b Merge branch 'pw/replay-exclude-gpgsig-fix'
+bdc5341ff6 The sixth batch
+644aed8921 Merge branch 'rs/config-set-multi-error-message-fix'
+e74a6e0cb9 Merge branch 'rs/config-unset-opthelp-fix'
+9d442ce2e2 Merge branch 'ps/object-source-management'
+1b40ddc1a5 Merge branch 'cc/fast-import-strip-if-invalid'
+85f99338e1 Merge branch 'js/ci-show-breakage-in-dockerized-jobs'
+77f8d994a8 Merge branch 'kh/doc-committer-date-is-author-date'
+0534b78576 Merge branch 'jc/optional-path'
+5eadcbf815 Merge branch 'js/strip-scalar-too'
+0c6707687f Merge branch 'en/xdiff-cleanup-2'
+```
+
+`--graph` gives you a nice visual view of how the branches were merged. I usually use it along with `--oneline` because most of the time I don't need all the info that git log gives.
+
+```bash
+* e85ae279b0 (HEAD -> master, origin/master, origin/HEAD) The seventh batch
+*   bbefa15ff5 Merge branch 'en/replay-doc-revision-range'
+|\
+| * 136f86abc0 Documentation/git-replay.adoc: fix errors around revision range
+* |   7fc0b33b5d Merge branch 'yc/xdiff-patience-optim'
+|\ \
+| * | c7e3b8085b xdiff: optimize patience diff's LCS search
+* | |   fe0e6ffa19 Merge branch 'bc/zsh-testsuite'
+|\ \ \
+| * | | a92f243a94 t5564: fix test hang under zsh's sh mode
+| * | | bf25fca31c t0614: use numerical comparison with test_line_count
+* | | |   c64b234a0b Merge branch 'pw/replay-exclude-gpgsig-fix'
+|\ \ \ \
+| * | | | 9f3a115087 replay: do not copy "gpgsign-sha256" header
+```
+
+The slashes and pipes show how branches diverged and merged.
+
+If you want to see the history of a file, you can use `git log -- <file-path>`. Again, I usually use `--oneline` with this one too.
+
+```bash
+$ git log --oneline -- progress.h
+1f7e6478dc progress: stop using `the_repository`
+74900a6b35 progress API: unify stop_progress{,_msg}(), fix trace2 bug
+a02014bb4c progress.h: format and be consistent with progress.c naming
+3cacb9aaf4 progress.c: silence cgcc suggestion about internal linkage
+425e51e54d Merge branch 'sg/overlong-progress-fix'
+9219d12777 progress: make display_progress() return void
+9d81ecb52b progress: add sparse mode to force 100% complete message
+d6861d0258 progress: fix progress meters when dealing with lots of work
+8aade107dd progress: simplify "delayed" progress API
+a984a06a07 nicer display of thin pack completion
+218558af59 make display of total transferred more accurate
+cf84d51c43 add throughput to progress display
+dc6a0757c4 make struct progress an opaque type
+42e18fbf5f more compact progress display
+421f9d1685 Fix the progress code to output LF only when it is really needed
+e0173ad9fc Make macros to prevent double-inclusion in headers consistent.
+180a9f2268 provide a facility for "delayed" progress reporting
+13aaf14825 make progress "title" part of the common progress interface
+96a02f8f6d common progress display support
+```
+
+You can even check the history of a function using `git log -L:<function-name>:<file-path>` like:
+
+```bash
+$ git log -L:stop_progress_msg:progress.c
+```
+
+## `git bisect`
+
+Remember that time you introduced a bug and you can't find it? `git bisect` is your friend. It will help you find the commit that introduced the bug by binary searching through the history of your repo. Look at you, putting your CS degree to good use!
+
+```bash
+$ git bisect start
+$ git bisect good <good-commit-hash>
+$ git bisect bad <bad-commit-hash>
+```
+
+> This is where you can use the `main@{1.week.ago}` syntax that we saw earlier.
+
+This will start the bisect process. It will checkout the midpoint between known good and bad commits. Once it checks out a commit, run your tests, or check your UI to see whether this commit is good or bad and mark it accordingly with `git bisect good` or `git bisect bad`.
+
+### `git bisect run`
+
+If you have a script that can tell if the code is good/bad, maybe a test file, you can automate the bisect process with `git bisect run <script> args`. The script should exit with the exit code 0 when the source code is good and anything between 1 and 127, except 125, when it is bad.
+
+> If you are not looking for when a bug was introduced, it can be confusing to use `good/bad`. `git bisect` has an option to use `old/new` for these cases in case it gets confusing. Just keep in mind that you can't mix the two sets of terms.
+
+## git aliases
+
+You can create aliases for your git commands to make your life easier. For example, you can create an alias for `git status` like this:
+
+```bash
+git config --global alias.st status
+git config --global alias.co checkout
+```
+
+Now you can just run `git st` instead of `git status` and `git co -b new-branch` instead of `git checkout -b new-branch`.
+
+Personally, I use zsh aliases instead of git aliases because I like to keep all my aliases in one place, but this might be useful if you want to keep git aliases separate.
+
+```bash
+alias gst='git status'
+alias gco='git checkout'
+alias gcmsg='git commit -m'
+alias glog='git log --oneline --graph'
+```
+
+If you use something like `oh-my-zsh`, the git plugin has a lot of useful aliases and functions. Most of mine are from it.
+
+## `git checkout`
+
+You've probably used `checkout` to switch to a different branch (it's recommended to use `git switch` for this in newer versions of git). But if you ever want to copy just a file from a different branch/commit to your current branch, you can use `git checkout <branch-name> -- <file-path>`. This will checkout the file from the branch/commit to your current branch. Use `git cherrypick` instead if you want to copy the changes from one or more commits to your current branch with the git history intact. This is more for when you need a fix in a file from a branch that is not merged yet.
+
+## `git show`
+
+On the same note, if you just want to see how a file looked in an older commit, you can use git show:
+
+```bash
+git show master@{1.week.ago}:progress.h
+git show 5d2be7425c:progress.h
+git show master^^:progress.h
+```
+
+## `git stash`
+
+You might already be familiar with `git stash`, it just stashes all your uncommitted changes. If you want to selectively stash changes, use `git stash --patch` to be dropped into an interactive TUI where you can decide what to do with each hunk.
+
+## What's Next?
+
+If you made it this far, you probably use git a fair bit and want to get a little better at it. A lot of these commands are things most people only discover after something goes wrong. Now you at least know they exist before panic kicks in.
+
+If you want to keep going deeper, the [official git docs](https://git-scm.com/) are surprisingly easy to understand.
+
+Some ideas for you to explore next:
+
+- Try combining the commands from this post: `git log -S` + `git bisect` is a great combo for debugging.
+- Play around with some other commands like `cherry-pick`, `range-diff`, and `blame -C`.
+
+And honestly, the best way to learn this stuff is still to just break things in a small repo and then fix them. Committed changes are very, very hard to lose when using git, at least as long as you know `git reflog`.
+
+So yeah, git can look intimidating from the outside, but once you understand a few of these "hidden" commands, it starts to feel a lot less magical and a lot more predictable. And that's really the goal here.

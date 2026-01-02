@@ -32,7 +32,8 @@ blockquote {
   border-left: 4px solid var(--accent);
   padding: 0 0 0 20px;
   margin: 0px;
-  /* font-size: 1.333em; */
+  font-size: 0.98em;
+  color: var(--foreground-muted);
 }
 
 ul,
@@ -65,7 +66,7 @@ h3,
 h4,
 h5,
 h6 {
-  @apply capitalize font-bold;
+  @apply font-bold;
 }
 
 h1 {
