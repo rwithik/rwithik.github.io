@@ -1,20 +1,20 @@
 ---
 title: "Intermediate git"
 description: "Some underused and underrated git commands and some details on how git works."
-pubDate: "Dec 27, 2025"
+pubDate: "Jan 03, 2026"
 ---
 
 {/* Note: There is a lot of content from a tech session I took at a previous company. */}
 
-​This article will help you get familiar with some underused and underrated git commands and some details on how git works. This article assumes that you are somewhat familiar with the basics of git. You should already be comfortable with commit/branch/staging basics.
+This article will help you get familiar with some underused and underrated git commands and some details on how git works. This article assumes that you are somewhat familiar with the basics of git. You should already be comfortable with commit/branch/staging basics.
 
 ## Pointers?
 
 Yeah, we have pointers in git too, but here they point to a commit (or at least something that can be used in place of a commit) instead of a memory address like in programming.
 
-There are a few you should know about. HEAD points to a branch ref, which points to a commit. And in detached HEAD (we'll get to that in the next section), it points directly to a commit. So, if you have just created a branch, it points to the `main` branch. If you checkout a new branch, it points to that one.
+There are a few you should know about. HEAD points to a branch ref, which points to a commit. And in detached HEAD (we'll get to that in the next section), it points directly to a commit. So, if you have just created a new repo, it points to the `main` branch. If you checkout a new branch, it points to that one.
 
-Branches are also basically just a pointer to a commit, more specifically, the latest commit on that branch. In fact, since git handles a lot of things with just basic files, you can see which commits all your branches point to by just opening the corresponding file in `.git/ref/heads`.
+Branches are also basically just a pointer to a commit, more specifically, the latest commit on that branch. In fact, since git handles a lot of things with just basic files, you can see which commits all your branches point to by just opening the corresponding file in `.git/refs/heads`.
 
 ### Detached HEAD
 
@@ -40,11 +40,11 @@ b79e266 (HEAD -> main, new-feature) HEAD@{4}: commit: my new feature
 91dc8a6 HEAD@{6}: commit (initial): Initial commit
 ```
 
-Seems daunting at first, but it's pretty simple. The first part(`b79e266` in the first line) is the shortened commit hash.
+Seems daunting at first, but it's pretty simple. The first part (`b79e266` in the first line) is the shortened commit hash.
 
 - The commit hash is usually 40 characters long (a SHA-1 hash rendered in hexadecimal), but if you can uniquely identify it with at least 4 characters, you can use that, so git shortens the hash a lot of the time. For my new repo, it's 7 characters long, but if a commit can't be uniquely identified with 7 characters, it'll automatically show more characters when showing shortened hashes. So you'll never run into an issue where the shortened hash won't uniquely identify a commit.
 
-The second part(`(HEAD -> main, new-feature)`) just describes how `HEAD` changed, usually only present when you switched branches.
+The second part (`(HEAD -> main, new-feature)`) just describes how `HEAD` changed, usually only present when you switched branches.
 
 The last part is a description, pretty straightforward.
 
@@ -56,7 +56,7 @@ You probably noticed that I skipped the third part `HEAD@{0}`. This syntax can b
 
 ## `git worktree`
 
-Remember that time you were working on a feature and your manager comes and tells you that a bug that has to be fixed today. You stash your changes, or make a temporary commit that you'll revert later, and make a new branch to work on the fix. `git worktree` will make that a bit easier. It gives you a different copy of your repo that you can work on independently. You create a worktree like so:
+Remember that time you were working on a feature and your manager comes and comes and tells you about a bug that has to be fixed today. You stash your changes, or make a temporary commit that you'll revert later, and make a new branch to work on the fix. `git worktree` will make that a bit easier. It gives you a different copy of your repo that you can work on independently. You create a worktree like so:
 
 ```bash
 git worktree add ../myrepo-fixes fix/urgent-bug-fix
@@ -64,7 +64,7 @@ git worktree add ../myrepo-fixes fix/urgent-bug-fix
 
 This creates a new worktree, which is essentially a copy of your repo, you can work on it how you would work on any repo. Any branches or commits you make in any worktree will be visible in all worktrees.
 
-You might be thinking, “How is this any different from just copying the whole directory?” A worktree is not a full repo copy. When you create a worktree, git will share the object database(the `.git/objects` directory), meaning you are not duplicating info about your commits. This gives you some QoL features like not having to fetch from the same remote multiple times, not being able to check out the same branch in multiple places and accidentally introducing conflicts later. Copying the directory will copy over everything, including the `.git` file, so worktrees are just more convenient and efficient.
+You might be thinking, “How is this any different from just copying the whole directory?” A worktree is not a full repo copy. When you create a worktree, git will share the object database (the `.git/objects` directory), meaning you are not duplicating info about your commits. This gives you some QoL features like not having to fetch from the same remote multiple times, not being able to check out the same branch in multiple places and accidentally introducing conflicts later. Copying the directory will copy over everything, including the `.git` file, so worktrees are just more convenient and efficient.
 
 {/* , meaning you'll just need to pull from your remote once to update all worktrees. git will also prevent you from checking out the same branch in multiple worktrees, so that you'll not run into conflicts later. Copying the directory will duplicate the whole .git directory, so worktree is just a bit more efficient. */}
 
@@ -189,7 +189,7 @@ If you use something like `oh-my-zsh`, the git plugin has a lot of useful aliase
 
 ## `git checkout`
 
-You probably have used `checkout` to switch to a different branch(it's recommended to use `git switch` for this in newer versions on git). But if you ever want to copy just a file from a different branch/commit to your current branch, you can use `git checkout <branch-name> -- <file-path>`. This will checkout the file from the branch/commit to your current branch. Use `git cherrypick` instead if you want to copy the changes from one or more commits to your current branch with the git history intact. This is more for when you need a fix in a file from a branch that is not merged yet.
+You've probably used `checkout` to switch to a different branch (it's recommended to use `git switch` for this in newer versions of git). But if you ever want to copy just a file from a different branch/commit to your current branch, you can use `git checkout <branch-name> -- <file-path>`. This will checkout the file from the branch/commit to your current branch. Use `git cherrypick` instead if you want to copy the changes from one or more commits to your current branch with the git history intact. This is more for when you need a fix in a file from a branch that is not merged yet.
 
 ## `git show`
 
